@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('type_ressource', function (Blueprint $table) {
             $table->id();
-            $table->string('intitule_type_res');
+            $table->string('intitule_type_res', 30);
         });
 
         Artisan::call('db:seed', array('--class' => 'TypeRessourceSeeder'));
