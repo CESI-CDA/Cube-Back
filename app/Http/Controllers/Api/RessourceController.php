@@ -10,6 +10,21 @@ use Illuminate\Http\Request;
 
 class RessourceController extends Controller
 {
+    /**
+     * @OA\Get(
+     *    path="/api/ressources",
+     *    summary="Liste des ressources",
+     *    description="",
+     *    tags={"Ressources"},
+     *   @OA\Response(
+     *       response=200,
+     *       description="OK",
+     *       @OA\MediaType(
+     *           mediaType="application/json"
+     *       )
+     *    )
+     *  )
+     */
     public function index(Request $request)
     {
         try {
@@ -34,11 +49,45 @@ class RessourceController extends Controller
         }
     }
 
+    /**
+     * @OA\Post(
+     *    path="/api/ressources",
+     *    summary="Ajouter une ressources",
+     *    description="",
+     *    tags={"Ressources"},
+     *   @OA\Parameter(
+     *       name="titre_res",
+     *       in="query",
+     *       description="Titre de la ressource",
+     *       required=true
+     *    ),
+     * @OA\Parameter(
+     *       name="contenu_res",
+     *       in="query",
+     *       description="Contenu de la ressource",
+     *       required=true
+     *    ),
+     * @OA\Parameter(
+     *       name="url_res",
+     *       in="query",
+     *       description="URL de la ressource",
+     *       required=true
+     *    ),
+     *   @OA\Response(
+     *       response=200,
+     *       description="OK",
+     *       @OA\MediaType(
+     *           mediaType="application/json"
+     *       )
+     *    )
+     *  )
+     */
+
     public function store(StoreRessourceRequest $request)
     {
         try {
             $validatedData = $request->validated();
-            
+
             $ressource = Ressource::create($validatedData);
 
             return response()->json([
@@ -60,6 +109,46 @@ class RessourceController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * @OA\Put(
+     *    path="/api/ressources/{id}",
+     *    summary="Modifier une ressources",
+     *    description="",
+     *    tags={"Ressources"},
+     *    @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       description="ID de la ressource",
+     *       required=true
+     *    ),
+     *   @OA\Parameter(
+     *       name="titre_res",
+     *       in="query",
+     *       description="Titre de la ressource",
+     *       required=true
+     *    ),
+     * @OA\Parameter(
+     *       name="contenu_res",
+     *       in="query",
+     *       description="Contenu de la ressource",
+     *       required=true
+     *    ),
+     * @OA\Parameter(
+     *       name="url_res",
+     *       in="query",
+     *       description="URL de la ressource",
+     *       required=true
+     *    ),
+     *   @OA\Response(
+     *       response=200,
+     *       description="OK",
+     *       @OA\MediaType(
+     *           mediaType="application/json"
+     *       )
+     *    )
+     *  )
+     */
 
     public function update(UpdateRessourceRequest $request, $id)
     {
@@ -90,6 +179,28 @@ class RessourceController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * @OA\Delete(
+     *    path="/api/ressources/{id}",
+     *    summary="Supprimer une ressources",
+     *    description="",
+     *    tags={"Ressources"},
+     *    @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       description="ID de la ressource",
+     *       required=true
+     *    ),
+     *   @OA\Response(
+     *       response=200,
+     *       description="OK",
+     *       @OA\MediaType(
+     *           mediaType="application/json"
+     *       )
+     *    )
+     *  )
+     */
 
     public function destroy($id)
     {

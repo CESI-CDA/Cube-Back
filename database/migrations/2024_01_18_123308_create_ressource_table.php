@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('ressource', function (Blueprint $table) {
-            $table->id('id_res');
+            $table->id();
             $table->string('titre_res', 40);
             $table->longText('contenu_res');
             $table->longText('url_res')->nullable();

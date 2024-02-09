@@ -1,0 +1,142 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Cube-back",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/ressources": {
+            "get": {
+                "tags": [
+                    "Ressources"
+                ],
+                "summary": "Liste des ressources",
+                "description": "",
+                "operationId": "9e2c3350f2d7a4aa04c9296e672dd45a",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Ressources"
+                ],
+                "summary": "Ajouter une ressources",
+                "description": "",
+                "operationId": "d5e8c5df1d1cac7ff2c1a25f81ffb388",
+                "parameters": [
+                    {
+                        "name": "titre_res",
+                        "in": "query",
+                        "description": "Titre de la ressource",
+                        "required": true
+                    },
+                    {
+                        "name": "contenu_res",
+                        "in": "query",
+                        "description": "Contenu de la ressource",
+                        "required": true
+                    },
+                    {
+                        "name": "url_res",
+                        "in": "query",
+                        "description": "URL de la ressource",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ressources/{id}": {
+            "put": {
+                "tags": [
+                    "Ressources"
+                ],
+                "summary": "Modifier une ressources",
+                "description": "",
+                "operationId": "ac433b3f23904630aaf553ab263a3e27",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la ressource",
+                        "required": true
+                    },
+                    {
+                        "name": "titre_res",
+                        "in": "query",
+                        "description": "Titre de la ressource",
+                        "required": true
+                    },
+                    {
+                        "name": "contenu_res",
+                        "in": "query",
+                        "description": "Contenu de la ressource",
+                        "required": true
+                    },
+                    {
+                        "name": "url_res",
+                        "in": "query",
+                        "description": "URL de la ressource",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Ressources"
+                ],
+                "summary": "Supprimer une ressources",
+                "description": "",
+                "operationId": "b1b9d669f5d1361f8378633eb52d0bdf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la ressource",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "bearerAuth",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    }
+}
