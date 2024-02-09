@@ -126,6 +126,50 @@
                     }
                 }
             }
+        },
+        "/api/users": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Ajouter une utilisateur",
+                "description": "",
+                "operationId": "be551c1d694a01c164966f58bfa77013",
+                "parameters": [
+                    {
+                        "name": "nom",
+                        "in": "query",
+                        "description": "Nom de l'utilisateur",
+                        "required": true
+                    },
+                    {
+                        "name": "prenom",
+                        "in": "query",
+                        "description": "Prénom de l'utilisateur",
+                        "required": true
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Email de l'utilisateur",
+                        "required": true
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "Mot de passe de l'utilisateur",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {

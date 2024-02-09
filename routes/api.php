@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\RessourceController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,3 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('ressources', RessourceController::class);
+
+Route::apiResource('users', UserController::class);
