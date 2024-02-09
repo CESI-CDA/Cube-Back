@@ -13,10 +13,16 @@ class RessourceSeeder extends Seeder
      */
     public function run(): void
     {
-        Ressource::create([
-            'titre_res' => 'L\'épisode de neige en France',
-            'contenu_res' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',
-            'url_res' => 'https://www.lipsum.com/'
-        ]);
+        $ressources = [['', '', ''], ['', '', ''], ['', '', '']];
+
+        foreach ($ressources as $ressource)
+        {
+            Ressource::create([
+                'titre_res' => $ressource[0],
+                'contenu_res' => $ressource[1],
+                'url_res' => $ressource[2]
+            ]);
+
+        }
     }
 }
