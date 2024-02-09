@@ -13,7 +13,7 @@ class RessourceSeeder extends Seeder
      */
     public function run(): void
     {
-        $ressources = [['', '', ''], ['', '', ''], ['', '', '']];
+        $ressources = [['Titre Ressource 1', 'Contenu Ressource 1', 'URL Ressource 1'], ['Titre Ressource 2', 'Contenu Ressource 2', 'URL Ressource 2'], ['Titre Ressource 3', 'Contenu Ressource 3', 'URL Ressource 3']];
 
         foreach ($ressources as $ressource)
         {
