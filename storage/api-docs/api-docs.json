@@ -149,6 +149,12 @@
                         "required": true
                     },
                     {
+                        "name": "pseudonyme",
+                        "in": "query",
+                        "description": "Pseudonyme de l'utilisateur (unique)",
+                        "required": true
+                    },
+                    {
                         "name": "email",
                         "in": "query",
                         "description": "Email de l'utilisateur",
