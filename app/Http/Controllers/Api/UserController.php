@@ -28,6 +28,12 @@ class UserController extends Controller
      *       required=true
      *    ),
      * @OA\Parameter(
+     *       name="pseudonyme",
+     *       in="query",
+     *       description="Pseudonyme de l'utilisateur (unique)",
+     *       required=true
+     *    ),
+     * @OA\Parameter(
      *       name="email",
      *       in="query",
      *       description="Email de l'utilisateur",
