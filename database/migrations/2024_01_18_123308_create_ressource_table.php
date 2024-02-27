@@ -17,8 +17,11 @@ return new class extends Migration
             $table->string('titre_res', 40);
             $table->longText('contenu_res');
             $table->longText('url_res')->nullable();
-            $table->timestamp('created_at_res')->nullable();
-            $table->timestamp('updated_at_res')->nullable();
+            $table->foreignId('id_type_res')->constrained('type_ressource');
+            $table->foreignId('id_rel')->constrained('relation');
+            $table->foreignId('id_vis')->constrained('visibilite');
+            $table->foreignId('id_cat')->constrained('categorie');
+            $table->timestamps();
         });
 
         Artisan::call('db:seed', array('--class' => 'RessourceSeeder'));

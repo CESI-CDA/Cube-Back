@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->longText('contenu_com');
             $table->date('date_com');
+            $table->timestamps();
         });
+        Artisan::call('db:seed', array('--class' => 'CommentaireSeeder'));
     }
 
     /**

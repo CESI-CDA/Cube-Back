@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('role', function (Blueprint $table) {
             $table->id();
             $table->string('intitule_rol', 30);
+            $table->timestamps();
         });
 
         Artisan::call('db:seed', array('--class' => 'RoleSeeder'));
