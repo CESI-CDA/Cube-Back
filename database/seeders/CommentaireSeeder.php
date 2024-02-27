@@ -13,11 +13,12 @@ class CommentaireSeeder extends Seeder
      */
     public function run(): void
     {
-        $commentaires = ['Merci !', 'Super intuitif !'];
+        $commentaires = [['Merci !', "2024-02-02"], ['Super intuitif !', "2024-02-02"]];
 
         foreach ($commentaires as $commentaire) {
             Commentaire::create([
-                'contenu_com' => $commentaire
+                'contenu_com' => $commentaire[0],
+                'date_com' => $commentaire[1]
             ]);
         }
     }

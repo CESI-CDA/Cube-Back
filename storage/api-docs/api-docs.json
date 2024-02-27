@@ -10,15 +10,14 @@
                 "tags": [
                     "Ressources"
                 ],
-                "summary": "Liste des ressources",
-                "description": "",
+                "summary": "Récupérer toutes les ressources",
                 "operationId": "9e2c3350f2d7a4aa04c9296e672dd45a",
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {}
-                        }
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             },
@@ -26,79 +25,155 @@
                 "tags": [
                     "Ressources"
                 ],
-                "summary": "Ajouter une ressources",
-                "description": "",
+                "summary": "Créer une ressource",
                 "operationId": "d5e8c5df1d1cac7ff2c1a25f81ffb388",
-                "parameters": [
-                    {
-                        "name": "titre_res",
-                        "in": "query",
-                        "description": "Titre de la ressource",
-                        "required": true
-                    },
-                    {
-                        "name": "contenu_res",
-                        "in": "query",
-                        "description": "Contenu de la ressource",
-                        "required": true
-                    },
-                    {
-                        "name": "url_res",
-                        "in": "query",
-                        "description": "URL de la ressource",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {}
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "titre_res",
+                                    "contenu_res",
+                                    "id_type_res",
+                                    "id_rel",
+                                    "id_vis",
+                                    "id_cat"
+                                ],
+                                "properties": {
+                                    "titre_res": {
+                                        "type": "string",
+                                        "maxLength": 40
+                                    },
+                                    "contenu_res": {
+                                        "type": "string"
+                                    },
+                                    "url_res": {
+                                        "type": "string"
+                                    },
+                                    "id_type_res": {
+                                        "type": "integer"
+                                    },
+                                    "id_rel": {
+                                        "type": "integer"
+                                    },
+                                    "id_vis": {
+                                        "type": "integer"
+                                    },
+                                    "id_cat": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Item created successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             }
         },
         "/api/ressources/{id}": {
-            "put": {
+            "get": {
                 "tags": [
                     "Ressources"
                 ],
-                "summary": "Modifier une ressources",
-                "description": "",
-                "operationId": "ac433b3f23904630aaf553ab263a3e27",
+                "summary": "Récupérer une ressource spécifique",
+                "operationId": "70fa20537068ba16ca397172f7923e17",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID de la ressource",
-                        "required": true
-                    },
-                    {
-                        "name": "titre_res",
-                        "in": "query",
-                        "description": "Titre de la ressource",
-                        "required": true
-                    },
-                    {
-                        "name": "contenu_res",
-                        "in": "query",
-                        "description": "Contenu de la ressource",
-                        "required": true
-                    },
-                    {
-                        "name": "url_res",
-                        "in": "query",
-                        "description": "URL de la ressource",
+                        "description": "ID of the item",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {}
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Ressources"
+                ],
+                "summary": "Modifier une ressource",
+                "operationId": "ac433b3f23904630aaf553ab263a3e27",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "titre_res",
+                                    "contenu_res",
+                                    "id_type_res",
+                                    "id_rel",
+                                    "id_vis",
+                                    "id_cat"
+                                ],
+                                "properties": {
+                                    "titre_res": {
+                                        "type": "string",
+                                        "maxLength": 40
+                                    },
+                                    "contenu_res": {
+                                        "type": "string"
+                                    },
+                                    "url_res": {
+                                        "type": "string"
+                                    },
+                                    "id_type_res": {
+                                        "type": "integer"
+                                    },
+                                    "id_rel": {
+                                        "type": "integer"
+                                    },
+                                    "id_vis": {
+                                        "type": "integer"
+                                    },
+                                    "id_cat": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Item updated successfully"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             },
@@ -106,23 +181,25 @@
                 "tags": [
                     "Ressources"
                 ],
-                "summary": "Supprimer une ressources",
-                "description": "",
+                "summary": "Supprimer une ressource",
                 "operationId": "b1b9d669f5d1361f8378633eb52d0bdf",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID de la ressource",
+                        "description": "ID of the item",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {}
-                        }
+                        "description": "Item deleted successfully"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             }
@@ -188,5 +265,10 @@
                 "scheme": "bearer"
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "Ressources"
+        }
+    ]
 }

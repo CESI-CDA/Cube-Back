@@ -13,14 +13,18 @@ class RessourceSeeder extends Seeder
      */
     public function run(): void
     {
-        $ressources = [['Titre Ressource 1', 'Contenu Ressource 1', 'URL Ressource 1'], ['Titre Ressource 2', 'Contenu Ressource 2', 'URL Ressource 2'], ['Titre Ressource 3', 'Contenu Ressource 3', 'URL Ressource 3']];
+        $ressources = [['Titre Ressource 1', 'Contenu Ressource 1', 'URL Ressource 1', 1, 1, 1, 3], ['Titre Ressource 2', 'Contenu Ressource 2', 'URL Ressource 2', 2, 2, 1, 2], ['Titre Ressource 3', 'Contenu Ressource 3', 'URL Ressource 3', 3, 1, 2, 1]];
 
         foreach ($ressources as $ressource)
         {
             Ressource::create([
                 'titre_res' => $ressource[0],
                 'contenu_res' => $ressource[1],
-                'url_res' => $ressource[2]
+                'url_res' => $ressource[2],
+                'id_type_res' => $ressource[3],
+                'id_rel' => $ressource[4],
+                'id_vis' => $ressource[5],
+                'id_cat' => $ressource[6]
             ]);
 
         }

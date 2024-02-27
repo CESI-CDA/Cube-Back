@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('utilise', function (Blueprint $table) {
             $table->integer('nombre_uti');
             $table->dateTime('derniere_uti');
+            $table->timestamps();
         });
+        Artisan::call('db:seed', array('--class' => 'UtiliseSeeder'));
     }
 
     /**

@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('visibilite', function (Blueprint $table) {
+        Schema::create('relation', function (Blueprint $table) {
             $table->id();
-            $table->string('intitule_vis', 30);
+            $table->string('intitule_rel', 30);
+            $table->timestamps();
         });
+        Artisan::call('db:seed', array('--class' => 'RelationSeeder'));
     }
 
     /**
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('visibilite');
+        Schema::dropIfExists('relation');
     }
 };

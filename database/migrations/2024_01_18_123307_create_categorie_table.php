@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('type_etat', function (Blueprint $table) {
+        Schema::create('categorie', function (Blueprint $table) {
             $table->id();
-            $table->string('intitule_type_eta', 30);
+            $table->string('intitule_cat', 30);
+            $table->timestamps();
         });
+        Artisan::call('db:seed', array('--class' => 'CategorieSeeder'));
     }
 
     /**
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('type_etat');
+        Schema::dropIfExists('categorie');
     }
 };
