@@ -60,7 +60,7 @@ class RessourceController extends Controller
     public function show($id)
     {
         try {
-            $item = Ressource::findOrFail($id);
+            $item = Ressource::with('getTypeRessource', 'getRelationRessource', 'getVisibiliteRessource', 'getCategorieRessource')->findOrFail($id);
 
             return response()->json([
                 'status' => true,
