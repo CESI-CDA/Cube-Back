@@ -204,4 +204,44 @@ class UserController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * @OA\Delete(
+     *     path="/api/users/{id}",
+     *     summary="Supprimer un utilisateur",
+     *     tags={"Users"},
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID of the item"),
+     *     @OA\Response(response=200, description="Item deleted successfully"),
+     *     @OA\Response(response=404, description="Item not found"),
+     *     @OA\Response(response=500, description="Internal server error"),
+     * )
+     */
+
+     public function destroy($id)
+     {
+         try {
+             if (!is_numeric($id) || $id <= 0) {
+                 throw new \InvalidArgumentException('L\'ID doit être un nombre entier positif.');
+             }
+             $item = User::findOrFail($id);
+             $item->delete();
+ 
+             return response()->json([
+                 'status' => true,
+                 'message' => 'L\'utilisateur a été supprimé avec succès.'
+             ]);
+         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+             return response()->json([
+                 'status' => false,
+                 'message' => 'L\'utilisateur demandé n\'existe pas.',
+                 'error' => $e->getMessage(),
+             ], 404);
+         } catch (\Exception $e) {
+             return response()->json([
+                 'status' => false,
+                 'message' => 'Une erreur s\'est produite lors de la suppression.',
+                 'error' => $e->getMessage(),
+             ], 500);
+         }
+     }
 }
