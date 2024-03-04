@@ -431,6 +431,32 @@
                         "description": "Internal server error"
                     }
                 }
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Supprimer un utilisateur",
+                "operationId": "0b4133ed462528a5e648b88ead11e929",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item deleted successfully"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
             }
         }
     },
