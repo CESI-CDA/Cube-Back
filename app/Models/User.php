@@ -21,6 +21,7 @@ class User extends Authenticatable
         'nom',
         'prenom',
         'pseudonyme',
+        'photo_profil',
         'email',
         'password',
     ];

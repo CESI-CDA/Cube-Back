@@ -12,6 +12,58 @@
                 ],
                 "summary": "Récupérer toutes les ressources",
                 "operationId": "9e2c3350f2d7a4aa04c9296e672dd45a",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items to return per page (1-100)",
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 100,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "keywordTitreRes",
+                        "in": "query",
+                        "description": "Keyword for searching items by keywordTitreRes",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "keywordIdTypeRes",
+                        "in": "query",
+                        "description": "Keyword for searching items by keywordIdTypeRes",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "keywordIdRel",
+                        "in": "query",
+                        "description": "Keyword for searching items by keywordIdRel",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "keywordIdVis",
+                        "in": "query",
+                        "description": "Keyword for searching items by keywordIdVis",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "keywordIdCat",
+                        "in": "query",
+                        "description": "Keyword for searching items by keywordIdCat",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful operation"
@@ -205,51 +257,178 @@
             }
         },
         "/api/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Récupérer toutes les utilisateurs",
+                "operationId": "566aed8efb436ca506e0ef51a032ecd9",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items to return per page (1-100)",
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 100,
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Users"
                 ],
-                "summary": "Ajouter une utilisateur",
-                "description": "",
+                "summary": "Ajouter un utilisateur",
                 "operationId": "be551c1d694a01c164966f58bfa77013",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "nom": {
+                                        "type": "string",
+                                        "maxLength": 30
+                                    },
+                                    "prenom": {
+                                        "type": "string",
+                                        "maxLength": 30
+                                    },
+                                    "pseudonyme": {
+                                        "type": "string",
+                                        "maxLength": 30
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "maxLength": 255
+                                    },
+                                    "photo_profil": {
+                                        "description": "Fichier de photo de profil",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Création réussie de l'élément"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    },
+                    "500": {
+                        "description": "Erreur interne du serveur"
+                    }
+                }
+            }
+        },
+        "/api/users/{id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Récupérer un utilisateur spécifique",
+                "operationId": "6f51bd5fa2dddcd25e44cfa53dcbd10a",
                 "parameters": [
                     {
-                        "name": "nom",
-                        "in": "query",
-                        "description": "Nom de l'utilisateur",
-                        "required": true
-                    },
-                    {
-                        "name": "prenom",
-                        "in": "query",
-                        "description": "Prénom de l'utilisateur",
-                        "required": true
-                    },
-                    {
-                        "name": "pseudonyme",
-                        "in": "query",
-                        "description": "Pseudonyme de l'utilisateur (unique)",
-                        "required": true
-                    },
-                    {
-                        "name": "email",
-                        "in": "query",
-                        "description": "Email de l'utilisateur",
-                        "required": true
-                    },
-                    {
-                        "name": "password",
-                        "in": "query",
-                        "description": "Mot de passe de l'utilisateur",
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {}
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Modifier un user",
+                "operationId": "070e37fc9aff78ae73860751bc990ed3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nom",
+                                    "prenom",
+                                    "pseudonyme",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "nom": {
+                                        "type": "string",
+                                        "maxLength": 30
+                                    },
+                                    "prenom": {
+                                        "type": "string",
+                                        "maxLength": 30
+                                    },
+                                    "pseudonyme": {
+                                        "type": "string",
+                                        "maxLength": 30
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "maxLength": 255
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Item updated successfully"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             }
