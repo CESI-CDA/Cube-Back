@@ -13,11 +13,47 @@ use Illuminate\Http\Request;
  */
 class RessourceController extends Controller
 {
-     /**
+    /**
      * @OA\Get(
      *     path="/api/ressources",
      *     summary="Récupérer toutes les ressources",
      *     tags={"Ressources"},
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         description="Number of items to return per page (1-100)",
+     *         @OA\Schema(type="integer", minimum=1, maximum=100)
+     *     ),
+     *     @OA\Parameter(
+     *         name="keywordTitreRes",
+     *         in="query",
+     *         description="Keyword for searching items by keywordTitreRes",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="keywordIdTypeRes",
+     *         in="query",
+     *         description="Keyword for searching items by keywordIdTypeRes",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="keywordIdRel",
+     *         in="query",
+     *         description="Keyword for searching items by keywordIdRel",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="keywordIdVis",
+     *         in="query",
+     *         description="Keyword for searching items by keywordIdVis",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="keywordIdCat",
+     *         in="query",
+     *         description="Keyword for searching items by keywordIdCat",
+     *         @OA\Schema(type="integer")
+     *     ),
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=500, description="Internal server error"),
      * )
@@ -26,10 +62,40 @@ class RessourceController extends Controller
     {
         try {
             $request->validate([
-                'per_page' => 'integer|min:1|max:100'
+                'per_page' => 'integer|min:1|max:100',
+                'keywordTitreRes' => 'nullable|string|max:40',
+                'keywordIdTypeRes' => 'nullable|integer|exists:type_ressource,id',
+                'keywordIdRel' => 'nullable|integer|exists:type_ressource,id',
+                'keywordIdVis' => 'nullable|integer|exists:visibilite,id',
+                'keywordIdCat' => 'nullable|integer|exists:categorie,id'
             ]);
 
             $query = Ressource::query();
+
+            if ($request->has('keywordTitreRes') && $request->input('keywordTitreRes') !== null && $request->input('keywordTitreRes') !== 'undefined') {
+                $keywordTitreRes = $request->input('keywordTitreRes');
+                $query->where('ressource.titre_res', 'like', "%$keywordTitreRes%");
+            }
+
+            if ($request->has('keywordIdTypeRes') && $request->input('keywordIdTypeRes') !== null && $request->input('keywordIdTypeRes') !== 'undefined') {
+                $keywordIdTypeRes = $request->input('keywordIdTypeRes');
+                $query->where('ressource.id_type_res', $keywordIdTypeRes);
+            }
+
+            if ($request->has('keywordIdRel') && $request->input('keywordIdRel') !== null && $request->input('keywordIdRel') !== 'undefined') {
+                $keywordIdRel = $request->input('keywordIdRel');
+                $query->where('ressource.id_rel', $keywordIdRel);
+            }
+
+            if ($request->has('keywordIdVis') && $request->input('keywordIdVis') !== null && $request->input('keywordIdVis') !== 'undefined') {
+                $keywordIdVis = $request->input('keywordIdVis');
+                $query->where('ressource.id_vis', $keywordIdVis);
+            }
+
+            if ($request->has('keywordIdCat') && $request->input('keywordIdCat') !== null && $request->input('keywordIdCat') !== 'undefined') {
+                $keywordIdCat = $request->input('keywordIdCat');
+                $query->where('ressource.id_cat', $keywordIdCat);
+            }
 
             $items = $query->with('getTypeRessource', 'getRelationRessource', 'getVisibiliteRessource', 'getCategorieRessource')->paginate($request->input('per_page', 10));
 
@@ -75,7 +141,7 @@ class RessourceController extends Controller
         }
     }
 
-     /**
+    /**
      * @OA\Post(
      *     path="/api/ressources",
      *     summary="Créer une ressource",
@@ -126,7 +192,7 @@ class RessourceController extends Controller
         }
     }
 
-     /**
+    /**
      * @OA\Put(
      *     path="/api/ressources/{id}",
      *     summary="Modifier une ressource",
@@ -182,7 +248,7 @@ class RessourceController extends Controller
         }
     }
 
-     /**
+    /**
      * @OA\Delete(
      *     path="/api/ressources/{id}",
      *     summary="Supprimer une ressource",
