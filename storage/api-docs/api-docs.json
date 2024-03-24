@@ -170,6 +170,117 @@
                 }
             }
         },
+        "/api/liensRessourceUserFavoris/favorisFromUser/{id_user}": {
+            "get": {
+                "tags": [
+                    "LienRessourceUserFavoris"
+                ],
+                "summary": "Récupérer tous les favoris d'un utilisateur",
+                "operationId": "78cf9284bc59da02ca19c0e6c91c86da",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Nombre d'éléments à renvoyer par page (1-100)",
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 100,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "id_user",
+                        "in": "path",
+                        "description": "ID de l'utilisateur",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Opération réussie"
+                    },
+                    "500": {
+                        "description": "Erreur interne du serveur"
+                    }
+                }
+            }
+        },
+        "/api/liensRessourceUserFavoris": {
+            "post": {
+                "tags": [
+                    "LienRessourceUserFavoris"
+                ],
+                "summary": "Ajouter une ressource en favoris",
+                "operationId": "9839dc3835827a067f47a3fe3bf1f944",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_res",
+                                    "id_user"
+                                ],
+                                "properties": {
+                                    "id_res": {
+                                        "type": "integer"
+                                    },
+                                    "id_user": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Item created successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/liensRessourceUserFavoris/{id_res}/{id_user}": {
+            "delete": {
+                "tags": [
+                    "LienRessourceUserFavoris"
+                ],
+                "summary": "Supprimer une ressource des favoris",
+                "operationId": "1f80a99a42f14706221b6aa64f0ed028",
+                "parameters": [
+                    {
+                        "name": "id_res",
+                        "in": "path",
+                        "description": "ID of the ressource",
+                        "required": true
+                    },
+                    {
+                        "name": "id_user",
+                        "in": "path",
+                        "description": "ID of the user",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item deleted successfully"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
         "/api/ressources": {
             "get": {
                 "tags": [
@@ -721,6 +832,9 @@
     "tags": [
         {
             "name": "Categories"
+        },
+        {
+            "name": "LienRessourceUserFavoris"
         },
         {
             "name": "Ressources"

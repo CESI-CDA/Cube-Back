@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CategorieController;
+use App\Http\Controllers\Api\LienRessourceUserFavorisController;
 use App\Http\Controllers\Api\RessourceController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -27,3 +28,7 @@ Route::apiResource('users', UserController::class);
 Route::post('/users/storePhotoProfil/{id}', [UserController::class, 'storePhotoProfil']);
 
 Route::apiResource('categories', CategorieController::class);
+
+Route::get('/liensRessourceUserFavoris/favorisFromUser/{id_user}', [LienRessourceUserFavorisController::class, 'favorisFromUser']);
+Route::delete('/liensRessourceUserFavoris/{id_res}/{id_user}', [LienRessourceUserFavorisController::class, 'destroy']);
+Route::apiResource('liensRessourceUserFavoris', LienRessourceUserFavorisController::class);
