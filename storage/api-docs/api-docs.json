@@ -5,6 +5,171 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/categories": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Récupérer toutes les catégories",
+                "operationId": "d753b5a85d077f3a311df9eb28de8a1a",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items to return per page (1-100)",
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 100,
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Créer une catégorie",
+                "operationId": "1d6b893ef899e2aecece0a5e18049d8a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "intitule_cat"
+                                ],
+                                "properties": {
+                                    "intitule_cat": {
+                                        "type": "string",
+                                        "maxLength": 30
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Item created successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/categories/{id}": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Récupérer une catégorie spécifique",
+                "operationId": "02f8d50a129f2d0b43f583dfe51c9cc5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Modifier une catégorie",
+                "operationId": "2eaa317f2ea8871f48bcecdfe95e6a83",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "intitule_cat"
+                                ],
+                                "properties": {
+                                    "intitule_cat": {
+                                        "type": "string",
+                                        "maxLength": 30
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Item updated successfully"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Supprimer une catégorie",
+                "operationId": "21702b2a8b7abdf7a40668fdcdf63a16",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item deleted successfully"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
         "/api/ressources": {
             "get": {
                 "tags": [
@@ -62,6 +227,14 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "name": "keywordIdCreateur",
+                        "in": "query",
+                        "description": "Keyword for searching items by keywordIdCreateur",
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -88,9 +261,10 @@
                                     "titre_res",
                                     "contenu_res",
                                     "id_type_res",
-                                    "id_rel",
                                     "id_vis",
-                                    "id_cat"
+                                    "id_createur",
+                                    "arrayIdCat",
+                                    "arrayIdRel"
                                 ],
                                 "properties": {
                                     "titre_res": {
@@ -106,14 +280,23 @@
                                     "id_type_res": {
                                         "type": "integer"
                                     },
-                                    "id_rel": {
-                                        "type": "integer"
-                                    },
                                     "id_vis": {
                                         "type": "integer"
                                     },
-                                    "id_cat": {
+                                    "id_createur": {
                                         "type": "integer"
+                                    },
+                                    "arrayIdRel": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "arrayIdCat": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        }
                                     }
                                 },
                                 "type": "object"
@@ -181,9 +364,10 @@
                                     "titre_res",
                                     "contenu_res",
                                     "id_type_res",
-                                    "id_rel",
                                     "id_vis",
-                                    "id_cat"
+                                    "id_createur",
+                                    "arrayIdCat",
+                                    "arrayIdRel"
                                 ],
                                 "properties": {
                                     "titre_res": {
@@ -199,14 +383,23 @@
                                     "id_type_res": {
                                         "type": "integer"
                                     },
-                                    "id_rel": {
-                                        "type": "integer"
-                                    },
                                     "id_vis": {
                                         "type": "integer"
                                     },
-                                    "id_cat": {
+                                    "id_createur": {
                                         "type": "integer"
+                                    },
+                                    "arrayIdRel": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "arrayIdCat": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        }
                                     }
                                 },
                                 "type": "object"
@@ -293,8 +486,16 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "multipart/form-data": {
+                        "application/json": {
                             "schema": {
+                                "required": [
+                                    "nom",
+                                    "prenom",
+                                    "pseudonyme",
+                                    "email",
+                                    "password",
+                                    "id_rol"
+                                ],
                                 "properties": {
                                     "nom": {
                                         "type": "string",
@@ -316,10 +517,8 @@
                                         "type": "string",
                                         "maxLength": 255
                                     },
-                                    "photo_profil": {
-                                        "description": "Fichier de photo de profil",
-                                        "type": "string",
-                                        "format": "binary"
+                                    "id_rol": {
+                                        "type": "integer"
                                     }
                                 },
                                 "type": "object"
@@ -329,13 +528,13 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Création réussie de l'élément"
+                        "description": "Item created successfully"
                     },
                     "422": {
-                        "description": "Erreur de validation"
+                        "description": "Validation error"
                     },
                     "500": {
-                        "description": "Erreur interne du serveur"
+                        "description": "Internal server error"
                     }
                 }
             }
@@ -368,7 +567,7 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Modifier un user",
+                "summary": "Modifier un utilisateur",
                 "operationId": "070e37fc9aff78ae73860751bc990ed3",
                 "parameters": [
                     {
@@ -388,7 +587,8 @@
                                     "prenom",
                                     "pseudonyme",
                                     "email",
-                                    "password"
+                                    "password",
+                                    "id_rol"
                                 ],
                                 "properties": {
                                     "nom": {
@@ -407,9 +607,8 @@
                                         "type": "string",
                                         "maxLength": 100
                                     },
-                                    "password": {
-                                        "type": "string",
-                                        "maxLength": 255
+                                    "id_rol": {
+                                        "type": "integer"
                                     }
                                 },
                                 "type": "object"
@@ -458,6 +657,54 @@
                     }
                 }
             }
+        },
+        "/api/users/storePhotoProfil/{id}": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Ajouter une photo de profil",
+                "operationId": "52f398c99995b5cbd781dd82479d00bf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "photo_profil"
+                                ],
+                                "properties": {
+                                    "photo_profil": {
+                                        "description": "Fichier de photo de profil",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Création réussie de l'élément"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    },
+                    "500": {
+                        "description": "Erreur interne du serveur"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -472,6 +719,9 @@
         }
     },
     "tags": [
+        {
+            "name": "Categories"
+        },
         {
             "name": "Ressources"
         }

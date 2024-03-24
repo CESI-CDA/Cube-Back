@@ -18,10 +18,10 @@ return new class extends Migration
             $table->longText('contenu_res');
             $table->longText('url_res')->nullable();
             $table->foreignId('id_type_res')->constrained('type_ressource');
-            $table->foreignId('id_rel')->constrained('relation');
             $table->foreignId('id_vis')->constrained('visibilite');
-            $table->foreignId('id_cat')->constrained('categorie');
+            $table->foreignId('id_createur')->constrained('users');
             $table->timestamps();
+            $table->boolean('deleted')->default(false);
         });
 
         Artisan::call('db:seed', array('--class' => 'RessourceSeeder'));

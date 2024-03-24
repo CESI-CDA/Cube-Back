@@ -10,6 +10,6 @@ class TypeRessource extends Model
     use HasFactory;
 
     protected $table = 'type_ressource';
-    protected $fillable = ['intitule_type_res'];
-    public $timestamps = false;
+    protected $fillable = ['intitule_type_res', 'deleted'];
+    public $timestamps = true;
 }

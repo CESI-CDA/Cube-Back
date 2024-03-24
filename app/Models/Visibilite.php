@@ -9,6 +9,6 @@ class Visibilite extends Model
 {
     use HasFactory;
     protected $table = 'visibilite';
-    protected $fillable = ['intitule_vis'];
-    public $timestamps = false;
+    protected $fillable = ['intitule_vis', 'deleted'];
+    public $timestamps = true;
 }

@@ -9,6 +9,6 @@ class Categorie extends Model
 {
     use HasFactory;
     protected $table = 'categorie';
-    protected $fillable = ['intitule_cat'];
-    public $timestamps = false;
+    protected $fillable = ['intitule_cat', 'deleted'];
+    public $timestamps = true;
 }
