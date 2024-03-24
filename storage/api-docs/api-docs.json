@@ -8,7 +8,7 @@
         "/api/categories": {
             "get": {
                 "tags": [
-                    "Categories"
+                    "Categorie"
                 ],
                 "summary": "Récupérer toutes les catégories",
                 "operationId": "d753b5a85d077f3a311df9eb28de8a1a",
@@ -35,7 +35,7 @@
             },
             "post": {
                 "tags": [
-                    "Categories"
+                    "Categorie"
                 ],
                 "summary": "Créer une catégorie",
                 "operationId": "1d6b893ef899e2aecece0a5e18049d8a",
@@ -74,7 +74,7 @@
         "/api/categories/{id}": {
             "get": {
                 "tags": [
-                    "Categories"
+                    "Categorie"
                 ],
                 "summary": "Récupérer une catégorie spécifique",
                 "operationId": "02f8d50a129f2d0b43f583dfe51c9cc5",
@@ -97,7 +97,7 @@
             },
             "put": {
                 "tags": [
-                    "Categories"
+                    "Categorie"
                 ],
                 "summary": "Modifier une catégorie",
                 "operationId": "2eaa317f2ea8871f48bcecdfe95e6a83",
@@ -145,7 +145,7 @@
             },
             "delete": {
                 "tags": [
-                    "Categories"
+                    "Categorie"
                 ],
                 "summary": "Supprimer une catégorie",
                 "operationId": "21702b2a8b7abdf7a40668fdcdf63a16",
@@ -284,7 +284,7 @@
         "/api/ressources": {
             "get": {
                 "tags": [
-                    "Ressources"
+                    "Ressource"
                 ],
                 "summary": "Récupérer toutes les ressources",
                 "operationId": "9e2c3350f2d7a4aa04c9296e672dd45a",
@@ -359,7 +359,7 @@
             },
             "post": {
                 "tags": [
-                    "Ressources"
+                    "Ressource"
                 ],
                 "summary": "Créer une ressource",
                 "operationId": "d5e8c5df1d1cac7ff2c1a25f81ffb388",
@@ -431,7 +431,7 @@
         "/api/ressources/{id}": {
             "get": {
                 "tags": [
-                    "Ressources"
+                    "Ressource"
                 ],
                 "summary": "Récupérer une ressource spécifique",
                 "operationId": "70fa20537068ba16ca397172f7923e17",
@@ -454,7 +454,7 @@
             },
             "put": {
                 "tags": [
-                    "Ressources"
+                    "Ressource"
                 ],
                 "summary": "Modifier une ressource",
                 "operationId": "ac433b3f23904630aaf553ab263a3e27",
@@ -535,7 +535,7 @@
             },
             "delete": {
                 "tags": [
-                    "Ressources"
+                    "Ressource"
                 ],
                 "summary": "Supprimer une ressource",
                 "operationId": "b1b9d669f5d1361f8378633eb52d0bdf",
@@ -831,13 +831,13 @@
     },
     "tags": [
         {
-            "name": "Categories"
+            "name": "Categorie"
         },
         {
             "name": "LienRessourceUserFavoris"
         },
         {
-            "name": "Ressources"
+            "name": "Ressource"
         }
     ]
 }

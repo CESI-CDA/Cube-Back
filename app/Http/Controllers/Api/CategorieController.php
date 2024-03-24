@@ -9,7 +9,7 @@ use App\Models\Categorie;
 use Illuminate\Http\Request;
 
 /**
- * @OA\Tag(name="Categories")
+ * @OA\Tag(name="Categorie")
  */
 class CategorieController extends Controller
 {
@@ -17,7 +17,7 @@ class CategorieController extends Controller
      * @OA\Get(
      *     path="/api/categories",
      *     summary="Récupérer toutes les catégories",
-     *     tags={"Categories"},
+     *     tags={"Categorie"},
      *     @OA\Parameter(
      *         name="per_page",
      *         in="query",
@@ -55,7 +55,7 @@ class CategorieController extends Controller
      * @OA\Get(
      *     path="/api/categories/{id}",
      *     summary="Récupérer une catégorie spécifique",
-     *     tags={"Categories"},
+     *     tags={"Categorie"},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID of the item"),
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=404, description="Item not found"),
@@ -83,7 +83,7 @@ class CategorieController extends Controller
      * @OA\Post(
      *     path="/api/categories",
      *     summary="Créer une catégorie",
-     *     tags={"Categories"},
+     *     tags={"Categorie"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -128,7 +128,7 @@ class CategorieController extends Controller
      * @OA\Put(
      *     path="/api/categories/{id}",
      *     summary="Modifier une catégorie",
-     *     tags={"Categories"},
+     *     tags={"Categorie"},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID of the item"),
      *     @OA\RequestBody(
      *         required=true,
@@ -178,7 +178,7 @@ class CategorieController extends Controller
      * @OA\Delete(
      *     path="/api/categories/{id}",
      *     summary="Supprimer une catégorie",
-     *     tags={"Categories"},
+     *     tags={"Categorie"},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID of the item"),
      *     @OA\Response(response=200, description="Item deleted successfully"),
      *     @OA\Response(response=404, description="Item not found"),
