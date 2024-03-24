@@ -730,7 +730,7 @@
                 "tags": [
                     "TypeRessource"
                 ],
-                "summary": "Récupérer toutes les types de ressources",
+                "summary": "Récupérer tous les types de ressources",
                 "operationId": "9a9fd7840e21722928668f033ddba9dd",
                 "parameters": [
                     {

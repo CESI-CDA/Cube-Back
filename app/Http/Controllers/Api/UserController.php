@@ -183,12 +183,12 @@ class UserController extends Controller
             return response()->json([
                 'status' => true,
                 'item' => $item,
-                'message' => 'L\'utilisateur a été mise à jour avec succès.'
+                'message' => 'L\'utilisateur a été mis à jour avec succès.'
             ]);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'L\'utilisateur demandée n\'existe pas.',
+                'message' => 'L\'utilisateur demandé n\'existe pas.',
                 'error' => $e->getMessage(),
             ], 404);
         } catch (\Exception $e) {

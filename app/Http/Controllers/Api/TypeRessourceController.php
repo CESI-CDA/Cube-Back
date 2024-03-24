@@ -16,7 +16,7 @@ class TypeRessourceController extends Controller
     /**
      * @OA\Get(
      *     path="/api/typesRessource",
-     *     summary="Récupérer toutes les types de ressources",
+     *     summary="Récupérer tous les types de ressources",
      *     tags={"TypeRessource"},
      *     @OA\Parameter(
      *         name="per_page",

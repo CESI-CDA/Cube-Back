@@ -112,7 +112,7 @@ class CategorieController extends Controller
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Erreur lors de la création de la ressource.',
+                'message' => 'Erreur lors de la création de la catégorie.',
                 'error' => $e->getMessage(),
             ], 500);
         } catch (\Exception $e) {
@@ -201,7 +201,7 @@ class CategorieController extends Controller
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'La ressource demandée n\'existe pas.',
+                'message' => 'La catégorie demandée n\'existe pas.',
                 'error' => $e->getMessage(),
             ], 404);
         } catch (\Exception $e) {
