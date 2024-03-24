@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('type_etat', function (Blueprint $table) {
-            $table->id();
-            $table->string('intitule_type_eta', 30);
+        Schema::create('lien_ressource_user_favoris', function (Blueprint $table) {
+            $table->foreignId('id_res')->constrained('ressource');
+            $table->foreignId('id_user')->constrained('users');
+            $table->primary(['id_res', 'id_user']);
             $table->timestamps();
             $table->boolean('deleted')->default(false);
         });
-        Artisan::call('db:seed', array('--class' => 'TypeEtatSeeder'));
+
+        Artisan::call('db:seed', array('--class' => 'LienRessourceUserFavorisSeeder'));
     }
 
     /**
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('type_etat');
+        Schema::dropIfExists('lien_ressource_user_favoris');
     }
 };

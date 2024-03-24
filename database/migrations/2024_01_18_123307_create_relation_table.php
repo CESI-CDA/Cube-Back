@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('intitule_rel', 30);
             $table->timestamps();
+            $table->boolean('deleted')->default(false);
         });
         Artisan::call('db:seed', array('--class' => 'RelationSeeder'));
     }

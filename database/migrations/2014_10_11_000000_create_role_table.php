@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('commentaire', function (Blueprint $table) {
+        Schema::create('role', function (Blueprint $table) {
             $table->id();
-            $table->longText('contenu_com');
-            $table->date('date_com');
+            $table->string('intitule_rol', 30);
             $table->timestamps();
+            $table->boolean('deleted')->default(false);
         });
-        Artisan::call('db:seed', array('--class' => 'CommentaireSeeder'));
+
+        Artisan::call('db:seed', array('--class' => 'RoleSeeder'));
     }
 
     /**
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('commentaire');
+        Schema::dropIfExists('role');
     }
 };

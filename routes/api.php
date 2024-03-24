@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CategorieController;
 use App\Http\Controllers\Api\RessourceController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -23,3 +24,6 @@ use Illuminate\Support\Facades\Route;
 Route::apiResource('ressources', RessourceController::class);
 
 Route::apiResource('users', UserController::class);
+Route::post('/users/storePhotoProfil/{id}', [UserController::class, 'storePhotoProfil']);
+
+Route::apiResource('categories', CategorieController::class);

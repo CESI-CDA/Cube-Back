@@ -48,8 +48,13 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 
 $kernel = $app->make(Kernel::class);
 
-$response = $kernel->handle(
-    $request = Request::capture()
-)->send();
+// Renvoie vers le swagger
+$request = Request::capture();
+if ($request->getPathInfo() === '/') {
+    header('Location: /api/documentation', true, 302);
+    exit;
+}
+
+$response = $kernel->handle($request)->send();
 
 $kernel->terminate($request, $response);

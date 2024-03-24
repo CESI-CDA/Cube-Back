@@ -25,9 +25,8 @@ class UpdateUserRequest extends FormRequest
             'nom' => 'required|string|max:30',
             'prenom' => 'required|string|max:30',
             'pseudonyme' => 'required|string|max:30',
-            // 'photo_profil' => 'nullable|image|mimes:jpg,svg,png|max:2048',
             'email' => 'required|string|max:100',
-            'password' => 'required|string|max:255'
+            'id_rol'=> 'required|integer|exists:role,id'
         ];
     }
 }

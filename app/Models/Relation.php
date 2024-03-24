@@ -9,6 +9,6 @@ class Relation extends Model
 {
     use HasFactory;
     protected $table = 'relation';
-    protected $fillable = ['intitule_rel'];
-    public $timestamps = false;
+    protected $fillable = ['intitule_rel', 'deleted'];
+    public $timestamps = true;
 }

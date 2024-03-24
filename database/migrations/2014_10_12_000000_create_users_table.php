@@ -21,8 +21,12 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->foreignId('id_rol')->constrained('role');
             $table->timestamps();
+            $table->boolean('deleted')->default(false);
         });
+
+        Artisan::call('db:seed', array('--class' => 'UsersSeeder'));
     }
 
     /**

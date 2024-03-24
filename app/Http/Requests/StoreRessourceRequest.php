@@ -26,9 +26,12 @@ class StoreRessourceRequest extends FormRequest
             'contenu_res' => 'required|string',
             'url_res' => 'nullable|string',
             'id_type_res' => 'required|integer|exists:type_ressource,id',
-            'id_rel' => 'required|integer|exists:type_ressource,id',
             'id_vis' => 'required|integer|exists:visibilite,id',
-            'id_cat' => 'required|integer|exists:categorie,id'
+            'id_createur' => 'required|integer|exists:users,id',
+            'arrayIdCat' => 'required|array',
+            'arrayIdCat.*' => 'integer|exists:categorie,id',
+            'arrayIdRel' => 'required|array',
+            'arrayIdRel.*' => 'integer|exists:relation,id'
         ];
     }
 }
