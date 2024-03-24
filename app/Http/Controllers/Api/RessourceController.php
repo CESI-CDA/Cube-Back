@@ -11,7 +11,7 @@ use App\Models\Ressource;
 use Illuminate\Http\Request;
 
 /**
- * @OA\Tag(name="Ressources")
+ * @OA\Tag(name="Ressource")
  */
 class RessourceController extends Controller
 {
@@ -19,7 +19,7 @@ class RessourceController extends Controller
      * @OA\Get(
      *     path="/api/ressources",
      *     summary="Récupérer toutes les ressources",
-     *     tags={"Ressources"},
+     *     tags={"Ressource"},
      *     @OA\Parameter(
      *         name="per_page",
      *         in="query",
@@ -73,7 +73,7 @@ class RessourceController extends Controller
                 'per_page' => 'integer|min:1|max:100',
                 'keywordTitreRes' => 'nullable|string|max:40',
                 'keywordIdTypeRes' => 'nullable|integer|exists:type_ressource,id',
-                'keywordIdRel' => 'nullable|integer|exists:type_ressource,id',
+                'keywordIdRel' => 'nullable|integer|exists:relation,id',
                 'keywordIdVis' => 'nullable|integer|exists:visibilite,id',
                 'keywordIdCat' => 'nullable|integer|exists:categorie,id',
                 'keywordIdCreateur' => 'nullable|integer|exists:users,id'
@@ -135,7 +135,7 @@ class RessourceController extends Controller
      * @OA\Get(
      *     path="/api/ressources/{id}",
      *     summary="Récupérer une ressource spécifique",
-     *     tags={"Ressources"},
+     *     tags={"Ressource"},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID of the item"),
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=404, description="Item not found"),
@@ -163,7 +163,7 @@ class RessourceController extends Controller
      * @OA\Post(
      *     path="/api/ressources",
      *     summary="Créer une ressource",
-     *     tags={"Ressources"},
+     *     tags={"Ressource"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -239,7 +239,7 @@ class RessourceController extends Controller
      * @OA\Put(
      *     path="/api/ressources/{id}",
      *     summary="Modifier une ressource",
-     *     tags={"Ressources"},
+     *     tags={"Ressource"},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID of the item"),
      *     @OA\RequestBody(
      *         required=true,
@@ -362,7 +362,7 @@ class RessourceController extends Controller
      * @OA\Delete(
      *     path="/api/ressources/{id}",
      *     summary="Supprimer une ressource",
-     *     tags={"Ressources"},
+     *     tags={"Ressource"},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID of the item"),
      *     @OA\Response(response=200, description="Item deleted successfully"),
      *     @OA\Response(response=404, description="Item not found"),
