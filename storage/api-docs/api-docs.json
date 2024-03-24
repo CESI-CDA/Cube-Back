@@ -281,6 +281,171 @@
                 }
             }
         },
+        "/api/relations": {
+            "get": {
+                "tags": [
+                    "Relation"
+                ],
+                "summary": "Récupérer toutes les relations",
+                "operationId": "bc6ad9263d4916b67723477b145d6358",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items to return per page (1-100)",
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 100,
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Relation"
+                ],
+                "summary": "Créer une relation",
+                "operationId": "55df065737db7c5aac3c2cd9d13a6ca8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "intitule_rel"
+                                ],
+                                "properties": {
+                                    "intitule_rel": {
+                                        "type": "string",
+                                        "maxLength": 30
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Item created successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/relations/{id}": {
+            "get": {
+                "tags": [
+                    "Relation"
+                ],
+                "summary": "Récupérer une relation spécifique",
+                "operationId": "c057fc46b1f323c5b95509cc2a3f2216",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Relation"
+                ],
+                "summary": "Modifier une relation",
+                "operationId": "f98d7ce331b35227fb3fc5a7a4c29f00",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "intitule_rel"
+                                ],
+                                "properties": {
+                                    "intitule_rel": {
+                                        "type": "string",
+                                        "maxLength": 30
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Item updated successfully"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Relation"
+                ],
+                "summary": "Supprimer une relation",
+                "operationId": "6121e9d26218bde2db763ba9cf174d76",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item deleted successfully"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
         "/api/ressources": {
             "get": {
                 "tags": [
@@ -560,6 +725,171 @@
                 }
             }
         },
+        "/api/typesRessource": {
+            "get": {
+                "tags": [
+                    "TypeRessource"
+                ],
+                "summary": "Récupérer toutes les types de ressources",
+                "operationId": "9a9fd7840e21722928668f033ddba9dd",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items to return per page (1-100)",
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 100,
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "TypeRessource"
+                ],
+                "summary": "Créer un type de ressource",
+                "operationId": "d50b09af5467f15b6fa60c40b1ca0e38",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "intitule_type_res"
+                                ],
+                                "properties": {
+                                    "intitule_type_res": {
+                                        "type": "string",
+                                        "maxLength": 30
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Item created successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/typesRessource/{id}": {
+            "get": {
+                "tags": [
+                    "TypeRessource"
+                ],
+                "summary": "Récupérer un type de ressource spécifique",
+                "operationId": "a7fee5f01e9d3ab03b2a311029dd6658",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "TypeRessource"
+                ],
+                "summary": "Modifier un type de ressource",
+                "operationId": "049923eb4fc6d382ec4d5735e2e0bc92",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "intitule_type_res"
+                                ],
+                                "properties": {
+                                    "intitule_type_res": {
+                                        "type": "string",
+                                        "maxLength": 30
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Item updated successfully"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "TypeRessource"
+                ],
+                "summary": "Supprimer un type de ressource",
+                "operationId": "327db8e7afdb5102e69158e79fcfa961",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item deleted successfully"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
         "/api/users": {
             "get": {
                 "tags": [
@@ -816,6 +1146,171 @@
                     }
                 }
             }
+        },
+        "/api/visibilites": {
+            "get": {
+                "tags": [
+                    "Visibilite"
+                ],
+                "summary": "Récupérer toutes les visibilitées",
+                "operationId": "bbd81e2d814427b8d99610f55bf5eb1b",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items to return per page (1-100)",
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 100,
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Visibilite"
+                ],
+                "summary": "Créer une visibilité",
+                "operationId": "0befd5008d8e5d9760ee73c7af4e208a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "intitule_vis"
+                                ],
+                                "properties": {
+                                    "intitule_vis": {
+                                        "type": "string",
+                                        "maxLength": 30
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Item created successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/visibilites/{id}": {
+            "get": {
+                "tags": [
+                    "Visibilite"
+                ],
+                "summary": "Récupérer une visibilité spécifique",
+                "operationId": "f9bb654bc080c8728e715caeff7a39e4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Visibilite"
+                ],
+                "summary": "Modifier une visibilité",
+                "operationId": "602b12e30154361b248746d6861cdd35",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "intitule_vis"
+                                ],
+                                "properties": {
+                                    "intitule_vis": {
+                                        "type": "string",
+                                        "maxLength": 30
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Item updated successfully"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Visibilite"
+                ],
+                "summary": "Supprimer une visibilité",
+                "operationId": "05d8b04f41bae782b98cc99e9582b882",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item deleted successfully"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -837,7 +1332,16 @@
             "name": "LienRessourceUserFavoris"
         },
         {
+            "name": "Relation"
+        },
+        {
             "name": "Ressource"
+        },
+        {
+            "name": "TypeRessource"
+        },
+        {
+            "name": "Visibilite"
         }
     ]
 }
