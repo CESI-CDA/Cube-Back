@@ -144,7 +144,7 @@ class RessourceController extends Controller
     public function show($id)
     {
         try {
-            $item = Ressource::where('deleted', false)->with('getTypeRessource', 'getVisibilite', 'getCreateur', 'getLienRessourceRelation', 'getLienRessourceRelation.getRelationRessource', 'getLienRessourceCategorie', 'getLienRessourceCategorie.getCategorie')->findOrFail($id);
+            $item = Ressource::where('deleted', false)->with('getTypeRessource', 'getVisibilite', 'getCreateur', 'getLienRessourceRelation', 'getLienRessourceRelation.getRelationRessource', 'getLienRessourceCategorie', 'getLienRessourceCategorie.getCategorie', 'getLiensRessourceCommentaire')->findOrFail($id);
 
             return response()->json([
                 'status' => true,
@@ -329,7 +329,6 @@ class RessourceController extends Controller
                         ->where('id_rel', $relation)
                         ->update(['deleted' => false]);
                 }
-
             }
 
             LienRessourceRelation::whereIn('id_rel', $relationsToRemove)

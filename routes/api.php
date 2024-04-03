@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CategorieController;
+use App\Http\Controllers\Api\LienRessourceCommentaireController;
 use App\Http\Controllers\Api\LienRessourceUserFavorisController;
 use App\Http\Controllers\Api\RelationController;
 use App\Http\Controllers\Api\RessourceController;
@@ -41,3 +42,5 @@ Route::apiResource('relations', RelationController::class);
 Route::apiResource('typesRessource', TypeRessourceController::class);
 
 Route::apiResource('visibilites', VisibiliteController::class);
+
+Route::apiResource('liensRessourceCommentaire', LienRessourceCommentaireController::class);
