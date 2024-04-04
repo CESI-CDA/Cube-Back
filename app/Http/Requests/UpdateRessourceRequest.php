@@ -31,7 +31,8 @@ class UpdateRessourceRequest extends FormRequest
             'arrayIdCat' => 'required|array',
             'arrayIdCat.*' => 'integer|exists:categorie,id',
             'arrayIdRel' => 'required|array',
-            'arrayIdRel.*' => 'integer|exists:relation,id'
+            'arrayIdRel.*' => 'integer|exists:relation,id',
+            'is_archive' => 'required|boolean'
         ];
     }
 }

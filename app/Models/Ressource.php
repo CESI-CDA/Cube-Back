@@ -12,7 +12,7 @@ class Ressource extends Model
     use HasFactory;
 
     protected $table = 'ressource';
-    protected $fillable = ['titre_res', 'contenu_res', 'url_res', 'id_type_res', 'id_vis', 'id_createur', 'deleted'];
+    protected $fillable = ['titre_res', 'contenu_res', 'url_res', 'id_type_res', 'id_vis', 'id_createur', 'date_creation', 'is_archive', 'deleted'];
     public $timestamps = true;
 
     public function getTypeRessource(): BelongsTo
@@ -44,4 +44,6 @@ class Ressource extends Model
     {
         return $this->hasMany(LienRessourceCommentaire::class, 'id_res', 'id')->where('deleted', false)->select(['id', 'id_res', 'id_user', 'date', 'commentaire', 'id_commentaire_parent']);
     }
+
+    
 }
