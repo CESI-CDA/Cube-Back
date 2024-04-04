@@ -79,7 +79,7 @@ class UserController extends Controller
         }
     }
 
-     /**
+    /**
      * @OA\Post(
      *     path="/api/users",
      *     summary="Ajouter un utilisateur",
@@ -282,7 +282,7 @@ class UserController extends Controller
             $ancienNomFichier = basename($item->photo_profil);
 
             if (File::exists(public_path($chemin . $ancienNomFichier))) {
-                File::move(public_path($chemin . $ancienNomFichier), public_path($chemin . 'old_' .$ancienNomFichier));
+                File::move(public_path($chemin . $ancienNomFichier), public_path($chemin . 'old_' . $ancienNomFichier));
             }
 
             $validatedData['photo_profil']->move(public_path($chemin), $nom);

@@ -14,26 +14,26 @@ use Illuminate\Http\Request;
 class LienRessourceUserFavorisController extends Controller
 {
     /**
- * @OA\Get(
- *     path="/api/liensRessourceUserFavoris/favorisFromUser/{id_user}",
- *     summary="Récupérer tous les favoris d'un utilisateur",
- *     tags={"LienRessourceUserFavoris"},
- *     @OA\Parameter(
- *         name="per_page",
- *         in="query",
- *         description="Nombre d'éléments à renvoyer par page (1-100)",
- *         @OA\Schema(type="integer", minimum=1, maximum=100)
- *     ),
- *     @OA\Parameter(
- *         name="id_user",
- *         in="path",
- *         required=true,
- *         description="ID de l'utilisateur"
- *     ),
- *     @OA\Response(response=200, description="Opération réussie"),
- *     @OA\Response(response=500, description="Erreur interne du serveur"),
- * )
- */
+     * @OA\Get(
+     *     path="/api/liensRessourceUserFavoris/favorisFromUser/{id_user}",
+     *     summary="Récupérer tous les favoris d'un utilisateur",
+     *     tags={"LienRessourceUserFavoris"},
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         description="Nombre d'éléments à renvoyer par page (1-100)",
+     *         @OA\Schema(type="integer", minimum=1, maximum=100)
+     *     ),
+     *     @OA\Parameter(
+     *         name="id_user",
+     *         in="path",
+     *         required=true,
+     *         description="ID de l'utilisateur"
+     *     ),
+     *     @OA\Response(response=200, description="Opération réussie"),
+     *     @OA\Response(response=500, description="Erreur interne du serveur"),
+     * )
+     */
     public function favorisFromUser($id_user)
     {
         try {
