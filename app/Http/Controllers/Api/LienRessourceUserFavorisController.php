@@ -81,7 +81,17 @@ class LienRessourceUserFavorisController extends Controller
         try {
             $validatedData = $request->validated();
 
-            $item = LienRessourceUserFavoris::create($validatedData);
+            $itemExist = LienRessourceUserFavoris::where('id_res', $validatedData['id_res'])->where('id_user', $validatedData['id_user'])->first();
+
+            if ($itemExist) {
+                LienRessourceUserFavoris::where('id_res', $validatedData['id_res'])
+                ->where('id_user', $validatedData['id_user'])
+                ->update(['deleted' => 0]);
+            } else {
+                LienRessourceUserFavoris::create($validatedData);
+            }
+
+            $item = LienRessourceUserFavoris::where('id_res', $validatedData['id_res'])->where('id_user', $validatedData['id_user'])->firstOrFail();
 
             return response()->json([
                 'status' => true,
