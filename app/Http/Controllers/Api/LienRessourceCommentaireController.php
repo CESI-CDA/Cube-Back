@@ -52,7 +52,7 @@ class LienRessourceCommentaireController extends Controller
      *             required={"id_res", "id_user", "date", "commentaire"},
      *             @OA\Property(property="id_res",  type="integer"),
      *             @OA\Property(property="id_user",  type="integer"),
-     *             @OA\Property(property="date",  type="string", format="date-time"),
+     *             @OA\Property(property="date",  type="string", example="2024-04-04 07:13:21"),
      *             @OA\Property(property="commentaire",  type="string"),
      *             @OA\Property(property="id_commentaire_parent",  type="integer")
      *         )

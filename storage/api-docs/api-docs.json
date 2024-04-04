@@ -173,7 +173,7 @@
         "/api/liensRessourceCommentaire/{id}": {
             "get": {
                 "tags": [
-                    "Categorie"
+                    "LienRessourceCommentaire"
                 ],
                 "summary": "Récupérer un commentaire spécifique",
                 "operationId": "206ed07a47028a25d7ba02120c043fa8",
@@ -295,7 +295,7 @@
                                     },
                                     "date": {
                                         "type": "string",
-                                        "format": "date-time"
+                                        "example": "2024-04-04 07:13:21"
                                     },
                                     "commentaire": {
                                         "type": "string"
