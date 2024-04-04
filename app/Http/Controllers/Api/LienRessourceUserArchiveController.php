@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreLienRessourceUserFavorisRequest;
-use App\Models\LienRessourceUserFavoris;
+use App\Http\Requests\StoreLienRessourceUserArchiveRequest;
+use App\Models\LienRessourceUserArchive;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 /**
- * @OA\Tag(name="LienRessourceUserFavoris")
+ * @OA\Tag(name="LienRessourceUserArchive")
  */
-class LienRessourceUserFavorisController extends Controller
+class LienRessourceUserArchiveController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/liensRessourceUserFavoris/favorisFromUser/{id_user}",
-     *     summary="Récupérer tous les favoris d'un utilisateur",
-     *     tags={"LienRessourceUserFavoris"},
+     *     path="/api/liensRessourceUserArchive/archivesFromUser/{id_user}",
+     *     summary="Récupérer tous les archives d'un utilisateur",
+     *     tags={"LienRessourceUserArchive"},
      *     @OA\Parameter(
      *         name="per_page",
      *         in="query",
@@ -34,13 +34,13 @@ class LienRessourceUserFavorisController extends Controller
      *     @OA\Response(response=500, description="Erreur interne du serveur"),
      * )
      */
-    public function favorisFromUser($id_user)
+    public function archivesFromUser($id_user)
     {
         try {
-            $items = LienRessourceUserFavoris::where('deleted', false)->where('id_user', $id_user)->get();
+            $items = LienRessourceUserArchive::where('deleted', false)->where('id_user', $id_user)->get();
 
             if ($items->isEmpty()) {
-                throw new ModelNotFoundException("No query results for model [App\\Models\\LienRessourceUserFavoris] $id_user");
+                throw new ModelNotFoundException("No query results for model [App\\Models\\LienRessourceUserArchive] $id_user");
             }
 
             return response()->json([
@@ -58,9 +58,9 @@ class LienRessourceUserFavorisController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/liensRessourceUserFavoris/{id_res}/{id_user}",
-     *     summary="Récupérer une lien favoris entre la ressource et l'utilisateur",
-     *     tags={"LienRessourceUserFavoris"},
+     *     path="/api/liensRessourceUserArchive/{id_res}/{id_user}",
+     *     summary="Récupérer une lien d'archivage entre la ressource et l'utilisateur",
+     *     tags={"LienRessourceUserArchive"},
      *     @OA\Parameter(name="id_res", in="path", required=true, description="ID of the item"),
      *     @OA\Parameter(name="id_user", in="path", required=true, description="ID of the item"),
      *     @OA\Response(response=200, description="Successful operation"),
@@ -73,7 +73,7 @@ class LienRessourceUserFavorisController extends Controller
             if (!is_numeric($id_res) || $id_res <= 0 || !is_numeric($id_user) || $id_user <= 0) {
                 throw new \InvalidArgumentException('L\'ID doit être un nombre entier positif.');
             }
-            $item = LienRessourceUserFavoris::where('deleted', false)->where('id_res', $id_res)->where('id_user', $id_user)->firstOrFail();
+            $item = LienRessourceUserArchive::where('deleted', false)->where('id_res', $id_res)->where('id_user', $id_user)->firstOrFail();
 
             return response()->json([
                 'status' => true,
@@ -90,9 +90,9 @@ class LienRessourceUserFavorisController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/liensRessourceUserFavoris",
-     *     summary="Ajouter une ressource en favoris",
-     *     tags={"LienRessourceUserFavoris"},
+     *     path="/api/liensRessourceUserArchive",
+     *     summary="Mettre en archive une ressource",
+     *     tags={"LienRessourceUserArchive"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -108,32 +108,32 @@ class LienRessourceUserFavorisController extends Controller
      */
 
 
-    public function store(StoreLienRessourceUserFavorisRequest $request)
+    public function store(StoreLienRessourceUserArchiveRequest $request)
     {
         try {
             $validatedData = $request->validated();
 
-            $itemExist = LienRessourceUserFavoris::where('id_res', $validatedData['id_res'])->where('id_user', $validatedData['id_user'])->first();
+            $itemExist = LienRessourceUserArchive::where('id_res', $validatedData['id_res'])->where('id_user', $validatedData['id_user'])->first();
 
             if ($itemExist) {
-                LienRessourceUserFavoris::where('id_res', $validatedData['id_res'])
+                LienRessourceUserArchive::where('id_res', $validatedData['id_res'])
                 ->where('id_user', $validatedData['id_user'])
                 ->update(['deleted' => 0]);
             } else {
-                LienRessourceUserFavoris::create($validatedData);
+                LienRessourceUserArchive::create($validatedData);
             }
 
-            $item = LienRessourceUserFavoris::where('id_res', $validatedData['id_res'])->where('id_user', $validatedData['id_user'])->firstOrFail();
+            $item = LienRessourceUserArchive::where('id_res', $validatedData['id_res'])->where('id_user', $validatedData['id_user'])->firstOrFail();
 
             return response()->json([
                 'status' => true,
                 'item' => $item,
-                'message' => 'La ressource a été ajoutée en favoris avec succès.'
+                'message' => 'La ressource a été archivée avec succès.'
             ], 201);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Erreur lors de l\'ajout de la ressource en favoris.',
+                'message' => 'Erreur lors de l\'ajout de l\'archivage de la ressource.',
                 'error' => $e->getMessage(),
             ], 500);
         } catch (\Exception $e) {
@@ -148,9 +148,9 @@ class LienRessourceUserFavorisController extends Controller
     /**
      * @OA\Delete(
      
-     *     path="/api/liensRessourceUserFavoris/{id_res}/{id_user}",
-     *     summary="Supprimer une ressource des favoris",
-     *     tags={"LienRessourceUserFavoris"},
+     *     path="/api/liensRessourceUserArchive/{id_res}/{id_user}",
+     *     summary="Supprimer une ressource des archives",
+     *     tags={"LienRessourceUserArchive"},
      *     @OA\Parameter(name="id_res", in="path", required=true, description="ID of the ressource"),
      *     @OA\Parameter(name="id_user", in="path", required=true, description="ID of the user"),
      *     @OA\Response(response=200, description="Item deleted successfully"),
@@ -165,11 +165,11 @@ class LienRessourceUserFavorisController extends Controller
             if (!is_numeric($id_res) || $id_res <= 0 || !is_numeric($id_user) || $id_user <= 0) {
                 throw new \InvalidArgumentException('L\'ID doit être un nombre entier positif.');
             }
-            LienRessourceUserFavoris::where('deleted', false)->where('id_res', $id_res)->where('id_user', $id_user)->update(['deleted' => true]);
+            LienRessourceUserArchive::where('deleted', false)->where('id_res', $id_res)->where('id_user', $id_user)->update(['deleted' => true]);
 
             return response()->json([
                 'status' => true,
-                'message' => 'La ressource a été supprimée des favoris avec succès.'
+                'message' => 'La ressource a été supprimée des archives avec succès.'
             ]);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([

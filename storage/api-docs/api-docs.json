@@ -322,6 +322,146 @@
                 }
             }
         },
+        "/api/liensRessourceUserArchive/archivesFromUser/{id_user}": {
+            "get": {
+                "tags": [
+                    "LienRessourceUserArchive"
+                ],
+                "summary": "Récupérer tous les archives d'un utilisateur",
+                "operationId": "8e1d063707454f46c07e9baec441676c",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Nombre d'éléments à renvoyer par page (1-100)",
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 100,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "id_user",
+                        "in": "path",
+                        "description": "ID de l'utilisateur",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Opération réussie"
+                    },
+                    "500": {
+                        "description": "Erreur interne du serveur"
+                    }
+                }
+            }
+        },
+        "/api/liensRessourceUserArchive/{id_res}/{id_user}": {
+            "get": {
+                "tags": [
+                    "LienRessourceUserArchive"
+                ],
+                "summary": "Récupérer une lien d'archivage entre la ressource et l'utilisateur",
+                "operationId": "233e431dccd556546b89c2a699ece432",
+                "parameters": [
+                    {
+                        "name": "id_res",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    },
+                    {
+                        "name": "id_user",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "LienRessourceUserArchive"
+                ],
+                "summary": "Supprimer une ressource des archives",
+                "operationId": "8712d8ab643737a3394fdca9879fdf54",
+                "parameters": [
+                    {
+                        "name": "id_res",
+                        "in": "path",
+                        "description": "ID of the ressource",
+                        "required": true
+                    },
+                    {
+                        "name": "id_user",
+                        "in": "path",
+                        "description": "ID of the user",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item deleted successfully"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/liensRessourceUserArchive": {
+            "post": {
+                "tags": [
+                    "LienRessourceUserArchive"
+                ],
+                "summary": "Mettre en archive une ressource",
+                "operationId": "946fc718a4fdf8c625857bd3874afcef",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_res",
+                                    "id_user"
+                                ],
+                                "properties": {
+                                    "id_res": {
+                                        "type": "integer"
+                                    },
+                                    "id_user": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Item created successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
         "/api/liensRessourceUserFavoris/favorisFromUser/{id_user}": {
             "get": {
                 "tags": [
@@ -353,6 +493,69 @@
                     },
                     "500": {
                         "description": "Erreur interne du serveur"
+                    }
+                }
+            }
+        },
+        "/api/liensRessourceUserFavoris/{id_res}/{id_user}": {
+            "get": {
+                "tags": [
+                    "LienRessourceUserFavoris"
+                ],
+                "summary": "Récupérer une lien favoris entre la ressource et l'utilisateur",
+                "operationId": "c571be1d0bdc81539f0d45b8500901c5",
+                "parameters": [
+                    {
+                        "name": "id_res",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    },
+                    {
+                        "name": "id_user",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "LienRessourceUserFavoris"
+                ],
+                "summary": "Supprimer une ressource des favoris",
+                "operationId": "1f80a99a42f14706221b6aa64f0ed028",
+                "parameters": [
+                    {
+                        "name": "id_res",
+                        "in": "path",
+                        "description": "ID of the ressource",
+                        "required": true
+                    },
+                    {
+                        "name": "id_user",
+                        "in": "path",
+                        "description": "ID of the user",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item deleted successfully"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             }
@@ -392,40 +595,6 @@
                     },
                     "422": {
                         "description": "Validation error"
-                    },
-                    "500": {
-                        "description": "Internal server error"
-                    }
-                }
-            }
-        },
-        "/api/liensRessourceUserFavoris/{id_res}/{id_user}": {
-            "delete": {
-                "tags": [
-                    "LienRessourceUserFavoris"
-                ],
-                "summary": "Supprimer une ressource des favoris",
-                "operationId": "1f80a99a42f14706221b6aa64f0ed028",
-                "parameters": [
-                    {
-                        "name": "id_res",
-                        "in": "path",
-                        "description": "ID of the ressource",
-                        "required": true
-                    },
-                    {
-                        "name": "id_user",
-                        "in": "path",
-                        "description": "ID of the user",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Item deleted successfully"
-                    },
-                    "404": {
-                        "description": "Item not found"
                     },
                     "500": {
                         "description": "Internal server error"
@@ -617,6 +786,26 @@
                         }
                     },
                     {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Field to sort items by",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Sort order (asc or desc)",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
                         "name": "keywordTitreRes",
                         "in": "query",
                         "description": "Keyword for searching items by keywordTitreRes",
@@ -795,7 +984,8 @@
                                     "id_vis",
                                     "id_createur",
                                     "arrayIdCat",
-                                    "arrayIdRel"
+                                    "arrayIdRel",
+                                    "is_archive"
                                 ],
                                 "properties": {
                                     "titre_res": {
@@ -828,6 +1018,9 @@
                                         "items": {
                                             "type": "integer"
                                         }
+                                    },
+                                    "is_archive": {
+                                        "type": "boolean"
                                     }
                                 },
                                 "type": "object"
@@ -870,6 +1063,41 @@
                     },
                     "404": {
                         "description": "Item not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/ressources/ressourcesCreeFromUtilisateur/{id_user}": {
+            "get": {
+                "tags": [
+                    "Ressource"
+                ],
+                "summary": "Récupérer toutes les ressources crées par un utilisateur",
+                "operationId": "04f59ca17b22482c30d7c913c65376e0",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items to return per page (1-100)",
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 100,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "id_user",
+                        "in": "path",
+                        "description": "ID of the user",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
                     },
                     "500": {
                         "description": "Internal server error"
@@ -1482,6 +1710,9 @@
         },
         {
             "name": "LienRessourceCommentaire"
+        },
+        {
+            "name": "LienRessourceUserArchive"
         },
         {
             "name": "LienRessourceUserFavoris"

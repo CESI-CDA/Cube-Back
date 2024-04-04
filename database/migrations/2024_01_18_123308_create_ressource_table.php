@@ -3,6 +3,7 @@
 use Database\Seeders\RessourceSeeder;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -20,6 +21,8 @@ return new class extends Migration
             $table->foreignId('id_type_res')->constrained('type_ressource');
             $table->foreignId('id_vis')->constrained('visibilite');
             $table->foreignId('id_createur')->constrained('users');
+            $table->dateTime('date_creation');
+            $table->boolean('is_archive')->default(0);
             $table->timestamps();
             $table->boolean('deleted')->default(false);
         });

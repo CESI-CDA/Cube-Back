@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CategorieController;
 use App\Http\Controllers\Api\LienRessourceCommentaireController;
+use App\Http\Controllers\Api\LienRessourceUserArchiveController;
 use App\Http\Controllers\Api\LienRessourceUserFavorisController;
 use App\Http\Controllers\Api\RelationController;
 use App\Http\Controllers\Api\RessourceController;
@@ -35,6 +36,7 @@ Route::apiResource('categories', CategorieController::class);
 
 Route::get('/liensRessourceUserFavoris/favorisFromUser/{id_user}', [LienRessourceUserFavorisController::class, 'favorisFromUser']);
 Route::delete('/liensRessourceUserFavoris/{id_res}/{id_user}', [LienRessourceUserFavorisController::class, 'destroy']);
+Route::get('/liensRessourceUserFavoris/{id_res}/{id_user}', [LienRessourceUserFavorisController::class, 'show']);
 Route::apiResource('liensRessourceUserFavoris', LienRessourceUserFavorisController::class);
 
 Route::apiResource('relations', RelationController::class);
@@ -44,3 +46,11 @@ Route::apiResource('typesRessource', TypeRessourceController::class);
 Route::apiResource('visibilites', VisibiliteController::class);
 
 Route::apiResource('liensRessourceCommentaire', LienRessourceCommentaireController::class);
+
+Route::get('/ressources/ressourcesCreeFromUtilisateur/{id_user}', [RessourceController::class, 'ressourcesCreeFromUtilisateur']);
+
+Route::get('/liensRessourceUserArchive/archivesFromUser/{id_user}', [LienRessourceUserArchiveController::class, 'archivesFromUser']);
+Route::delete('/liensRessourceUserArchive/{id_res}/{id_user}', [LienRessourceUserArchiveController::class, 'destroy']);
+Route::get('/liensRessourceUserArchive/{id_res}/{id_user}', [LienRessourceUserArchiveController::class, 'show']);
+Route::apiResource('liensRessourceUserArchive', LienRessourceUserArchiveController::class);
+

@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateRessourceRequest;
 use App\Models\LienRessourceCategorie;
 use App\Models\LienRessourceRelation;
 use App\Models\Ressource;
+use DateTime;
 use Illuminate\Http\Request;
 
 /**
@@ -25,6 +26,18 @@ class RessourceController extends Controller
      *         in="query",
      *         description="Number of items to return per page (1-100)",
      *         @OA\Schema(type="integer", minimum=1, maximum=100)
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_by",
+     *         in="query",
+     *         description="Field to sort items by",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_order",
+     *         in="query",
+     *         description="Sort order (asc or desc)",
+     *         @OA\Schema(type="string", enum={"asc", "desc"})
      *     ),
      *     @OA\Parameter(
      *         name="keywordTitreRes",
@@ -71,15 +84,20 @@ class RessourceController extends Controller
         try {
             $request->validate([
                 'per_page' => 'integer|min:1|max:100',
+                'sort_by' => 'string|nullable',
+                'sort_order' => 'string|in:asc,desc',
                 'keywordTitreRes' => 'nullable|string|max:40',
                 'keywordIdTypeRes' => 'nullable|integer|exists:type_ressource,id',
                 'keywordIdRel' => 'nullable|integer|exists:relation,id',
                 'keywordIdVis' => 'nullable|integer|exists:visibilite,id',
                 'keywordIdCat' => 'nullable|integer|exists:categorie,id',
-                'keywordIdCreateur' => 'nullable|integer|exists:users,id'
+                'keywordIdCreateur' => 'nullable|integer|exists:users,id',
+                'keywordDateDebutCreation' => 'nullable|date',
+                'keywordDateFinCreation' => 'nullable|date',
+                'keywordIsArchive' => 'nullable|boolean',
             ]);
 
-            $query = Ressource::query();
+            $query = Ressource::query()->where('deleted', false);
 
             if ($request->has('keywordTitreRes') && $request->input('keywordTitreRes') !== null && $request->input('keywordTitreRes') !== 'undefined') {
                 $keywordTitreRes = $request->input('keywordTitreRes');
@@ -115,7 +133,22 @@ class RessourceController extends Controller
                 $query->where('ressource.id_createur', $keywordIdCreateur);
             }
 
-            $items = $query->where('deleted', false)->with('getTypeRessource', 'getVisibilite', 'getCreateur', 'getLienRessourceRelation', 'getLienRessourceRelation.getRelationRessource', 'getLienRessourceCategorie', 'getLienRessourceCategorie.getCategorie')->paginate($request->input('per_page', 10));
+            if ($request->has('keywordDateDebutCreation') && $request->input('keywordDateDebutCreation') !== null && $request->input('keywordDateDebutCreation') !== 'undefined' && $request->has('keywordDateFinCreation') && $request->input('keywordDateFinCreation') !== null && $request->input('keywordDateFinCreation') !== 'undefined') {
+                $date_debut = $request->input('keywordDateDebutCreation');
+                $date_fin = $request->input('keywordDateFinCreation');
+                $query->whereBetween('date_creation', [$date_debut, $date_fin]);
+            }
+
+            if ($request->has('keywordIsArchive') && $request->input('keywordIsArchive') !== null && $request->input('keywordIsArchive') !== 'undefined') {
+                $keywordIsArchive = $request->input('keywordIsArchive');
+                $query->where('ressource.is_archive', $keywordIsArchive);
+            }
+
+            $sortColumn = $request->input('sort_by', 'date_creation');
+            $sortOrder = $request->input('sort_order', 'desc');
+            $query->orderBy($sortColumn, $sortOrder);
+
+            $items = $query->with('getTypeRessource', 'getVisibilite', 'getCreateur', 'getLienRessourceRelation', 'getLienRessourceRelation.getRelationRessource', 'getLienRessourceCategorie', 'getLienRessourceCategorie.getCategorie')->paginate($request->input('per_page', 10));
 
             return response()->json([
                 'status' => true,
@@ -196,7 +229,9 @@ class RessourceController extends Controller
                 'url_res' => $validatedData['url_res'],
                 'id_type_res' => $validatedData['id_type_res'],
                 'id_vis' => $validatedData['id_vis'],
-                'id_createur' => $validatedData['id_createur']
+                'id_createur' => $validatedData['id_createur'],
+                'date_creation' => (new DateTime())->format('Y-m-d H:i:s'),
+                'is_archive' => 0
             ]);
 
             foreach ($validatedData['arrayIdCat'] as $categorie) {
@@ -244,7 +279,7 @@ class RessourceController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"titre_res", "contenu_res", "id_type_res", "id_vis", "id_createur", "arrayIdCat", "arrayIdRel"},
+     *             required={"titre_res", "contenu_res", "id_type_res", "id_vis", "id_createur", "arrayIdCat", "arrayIdRel", "is_archive"},
      *             @OA\Property(property="titre_res",  type="string", maxLength=40),
      *             @OA\Property(property="contenu_res",  type="string"),
      *             @OA\Property(property="url_res",  type="string"),
@@ -252,7 +287,8 @@ class RessourceController extends Controller
      *             @OA\Property(property="id_vis",  type="integer"),
      *             @OA\Property(property="id_createur",  type="integer"),
      *             @OA\Property(property="arrayIdRel",  type="array", @OA\Items(type="integer")),
-     *             @OA\Property(property="arrayIdCat",  type="array", @OA\Items(type="integer"))
+     *             @OA\Property(property="arrayIdCat",  type="array", @OA\Items(type="integer")),
+     *             @OA\Property(property="is_archive",  type="boolean"),
      *         )
      *     ),
      *     @OA\Response(response=200, description="Item updated successfully"),
@@ -278,7 +314,8 @@ class RessourceController extends Controller
                 'url_res' => $validatedData['url_res'],
                 'id_type_res' => $validatedData['id_type_res'],
                 'id_vis' => $validatedData['id_vis'],
-                'id_createur' => $validatedData['id_createur']
+                'id_createur' => $validatedData['id_createur'],
+                'is_archive' => $validatedData['is_archive']
             ]);
 
             $existingCategories = $ressource->getLienRessourceCategorie->pluck('id_cat')->toArray();
@@ -392,6 +429,48 @@ class RessourceController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'Une erreur s\'est produite lors de la suppression.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/ressources/ressourcesCreeFromUtilisateur/{id_user}",
+     *     summary="Récupérer toutes les ressources crées par un utilisateur",
+     *     tags={"Ressource"},
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         description="Number of items to return per page (1-100)",
+     *         @OA\Schema(type="integer", minimum=1, maximum=100)
+     *     ),
+     *     @OA\Parameter(name="id_user", in="path", required=true, description="ID of the user"),
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=500, description="Internal server error"),
+     * )
+     */
+    public function ressourcesCreeFromUtilisateur(Request $request, $id_user)
+    {
+        try {
+            $request->validate([
+                'per_page' => 'integer|min:1|max:100',
+            ]);
+
+            $query = Ressource::query()->where('deleted', false)->where('id_createur', $id_user);
+
+            $query->orderBy('date_creation', 'desc');
+
+            $items = $query->paginate($request->input('per_page', 10));
+
+            return response()->json([
+                'status' => true,
+                'items' => $items
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Une erreur s\'est produite.',
                 'error' => $e->getMessage(),
             ], 500);
         }
