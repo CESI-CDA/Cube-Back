@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserPhotoProfilRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\LienRessourceUserArchive;
+use App\Models\LienRessourceUserFavoris;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -64,7 +66,11 @@ class UserController extends Controller
     public function show($id)
     {
         try {
-            $item = User::where('deleted', false)->findOrFail($id);
+            $user = User::where('deleted', false)->findOrFail($id);
+            $getNombreFavoris = LienRessourceUserFavoris::where('id_user', $id)->where('deleted', 0)->count();
+            $getNombreArchive = LienRessourceUserArchive::where('id_user', $id)->where('deleted', 0)->count();
+
+            $item = array('user' => $user, 'getNombreFavoris' => $getNombreFavoris, 'getNombreArchive' => $getNombreArchive);
 
             return response()->json([
                 'status' => true,
