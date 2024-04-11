@@ -19,6 +19,29 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
+
+     /**
+     * @OA\Post(
+     *     path="/api/register",
+     *     summary="Register",
+     *     tags={"AuthLogin"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"nom", "prenom", "pseudonyme", "email", "password", "password_confirmation"},
+     *             @OA\Property(property="nom",  type="string", maxLength=255),
+     *             @OA\Property(property="prenom",  type="string", maxLength=255),
+     *             @OA\Property(property="pseudonyme",  type="string", maxLength=255),
+     *             @OA\Property(property="email",  type="string", maxLength=255),
+     *             @OA\Property(property="password",  type="string", maxLength=255),
+     *             @OA\Property(property="password_confirmation",  type="string", maxLength=255)
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Item created successfully"),
+     *     @OA\Response(response=422, description="Validation error"),
+     *     @OA\Response(response=500, description="Internal server error"),
+     *     * )
+     */
     public function store(Request $request): JsonResponse
     {
         $request->validate([
@@ -50,7 +73,5 @@ class RegisteredUserController extends Controller
             'user' => $user,
             'token' => $token->plainTextToken
         ]);
-
-        // 15|0z3gtIQUwHA7LE7uwP69voo23OUROWTTlsBykeVSfda768c3
     }
 }
