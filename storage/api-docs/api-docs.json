@@ -10,7 +10,7 @@
                 "tags": [
                     "Categorie"
                 ],
-                "summary": "Récupérer toutes les catégories",
+                "summary": "Récupérer toutes les ressources",
                 "operationId": "d753b5a85d077f3a311df9eb28de8a1a",
                 "parameters": [
                     {
@@ -21,6 +21,34 @@
                             "type": "integer",
                             "maximum": 100,
                             "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Keyword for searching items",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Field to sort items by",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Sort order (asc or desc)",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
                         }
                     }
                 ],
@@ -333,11 +361,39 @@
                     {
                         "name": "per_page",
                         "in": "query",
-                        "description": "Nombre d'éléments à renvoyer par page (1-100)",
+                        "description": "Number of items to return per page (1-100)",
                         "schema": {
                             "type": "integer",
                             "maximum": 100,
                             "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Keyword for searching items",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Field to sort items by",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Sort order (asc or desc)",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
                         }
                     },
                     {
@@ -349,10 +405,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Opération réussie"
+                        "description": "Successful operation"
                     },
                     "500": {
-                        "description": "Erreur interne du serveur"
+                        "description": "Internal server error"
                     }
                 }
             }
@@ -467,17 +523,45 @@
                 "tags": [
                     "LienRessourceUserFavoris"
                 ],
-                "summary": "Récupérer tous les favoris d'un utilisateur",
+                "summary": "Récupérer toutes les favoris d'un utilisateur",
                 "operationId": "78cf9284bc59da02ca19c0e6c91c86da",
                 "parameters": [
                     {
                         "name": "per_page",
                         "in": "query",
-                        "description": "Nombre d'éléments à renvoyer par page (1-100)",
+                        "description": "Number of items to return per page (1-100)",
                         "schema": {
                             "type": "integer",
                             "maximum": 100,
                             "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Keyword for searching items",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Field to sort items by",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Sort order (asc or desc)",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
                         }
                     },
                     {
@@ -489,10 +573,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Opération réussie"
+                        "description": "Successful operation"
                     },
                     "500": {
-                        "description": "Erreur interne du serveur"
+                        "description": "Internal server error"
                     }
                 }
             }
@@ -618,6 +702,34 @@
                             "type": "integer",
                             "maximum": 100,
                             "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Keyword for searching items",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Field to sort items by",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Sort order (asc or desc)",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
                         }
                     }
                 ],
@@ -1089,6 +1201,34 @@
                         }
                     },
                     {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Keyword for searching items",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Field to sort items by",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Sort order (asc or desc)",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
                         "name": "id_user",
                         "in": "path",
                         "description": "ID of the user",
@@ -1121,6 +1261,34 @@
                             "type": "integer",
                             "maximum": 100,
                             "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Keyword for searching items",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Field to sort items by",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Sort order (asc or desc)",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
                         }
                     }
                 ],
@@ -1287,6 +1455,34 @@
                             "maximum": 100,
                             "minimum": 1
                         }
+                    },
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Keyword for searching items",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Field to sort items by",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Sort order (asc or desc)",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
                     }
                 ],
                 "responses": {
@@ -1314,8 +1510,7 @@
                                     "prenom",
                                     "pseudonyme",
                                     "email",
-                                    "password",
-                                    "id_rol"
+                                    "password"
                                 ],
                                 "properties": {
                                     "nom": {
@@ -1337,9 +1532,6 @@
                                     "password": {
                                         "type": "string",
                                         "maxLength": 255
-                                    },
-                                    "id_rol": {
-                                        "type": "integer"
                                     }
                                 },
                                 "type": "object"
@@ -1543,6 +1735,34 @@
                             "type": "integer",
                             "maximum": 100,
                             "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Keyword for searching items",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Field to sort items by",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Sort order (asc or desc)",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
                         }
                     }
                 ],
