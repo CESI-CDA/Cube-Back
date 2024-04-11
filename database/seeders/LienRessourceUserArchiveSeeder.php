@@ -3,25 +3,45 @@
 namespace Database\Seeders;
 
 use App\Models\LienRessourceUserArchive;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Services\TruncateTableService;
 use Illuminate\Database\Seeder;
 
 class LienRessourceUserArchiveSeeder extends Seeder
 {
     /**
+     * The TruncateTableService instance.
+     *
+     * @var TruncateTableService
+     */
+    private $truncateTableService;
+
+    /**
+     * Constructor.
+     *
+     * @param TruncateTableService $truncateTableService
+     */
+    public function __construct(TruncateTableService $truncateTableService)
+    {
+        $this->truncateTableService = $truncateTableService;
+    }
+
+    /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $liensRessourceUserArchive = [[2, 2]];
+        $this->truncateTableService->truncateTable('lien_ressource_user_archive');
+        $lienRessourceUserArchiveData = [
+            ['id_res' => 2, 'id_user' => 2]
+        ];
 
-        foreach ($liensRessourceUserArchive as $lienRessourceUserArchive)
-        {
+        foreach ($lienRessourceUserArchiveData as $lienRessourceUserArchive) {
             LienRessourceUserArchive::create([
-                'id_res' => $lienRessourceUserArchive[0],
-                'id_user' => $lienRessourceUserArchive[1]
+                'id_res' => $lienRessourceUserArchive['id_res'],
+                'id_user' => $lienRessourceUserArchive['id_user']
             ]);
-
         }
     }
 }
+
+

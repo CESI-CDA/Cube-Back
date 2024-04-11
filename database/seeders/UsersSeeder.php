@@ -3,29 +3,55 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Services\TruncateTableService;
 use Illuminate\Database\Seeder;
 
 class UsersSeeder extends Seeder
 {
     /**
+     * The TruncateTableService instance.
+     *
+     * @var TruncateTableService
+     */
+    private $truncateTableService;
+
+    /**
+     * Constructor.
+     *
+     * @param TruncateTableService $truncateTableService
+     */
+    public function __construct(TruncateTableService $truncateTableService)
+    {
+        $this->truncateTableService = $truncateTableService;
+    }
+
+    /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $ressources = [['Cuvilliez', 'Antoine', 'AntoineCuvilliez', 'antoine.cuvilliez@outlook.fr', 'azerty', 1], ['Faucon', 'Nathan', 'FauconNathan', 'faucon.nathan@viacesi.fr', 'azerty', 1], ['Vasseur', 'Helene', 'HeleneVasseur', 'vasseur.helene@viacesi.fr', 'azerty', 1], ['Forestier', 'Julien', 'JulienForestier', 'forestier.julien@viacesi.fr', 'azerty', 1], ['Dervaux', 'Maxime', 'MaximeDervaux', 'dervaux.maxime@viacesi.fr', 'azerty', 1]];
+        $this->truncateTableService->truncateTable('users');
 
-        foreach ($ressources as $ressource)
-        {
+        $userData = [
+            ['id' => 1, 'nom' => 'Cuvilliez', 'prenom' => 'Antoine', 'pseudonyme' => 'AntoineCuvilliez', 'email' => 'antoine.cuvilliez@outlook.fr', 'password' => 'azerty', 'id_rol' => 1],
+            ['id' => 2, 'nom' => 'Faucon', 'prenom' => 'Nathan', 'pseudonyme' => 'FauconNathan', 'email' => 'nathan.faucon@viacesi.fr', 'password' => 'azerty', 'id_rol' => 1],
+            ['id' => 3, 'nom' => 'Vasseur', 'prenom' => 'Helene', 'pseudonyme' => 'HeleneVasseur', 'email' => 'helene.vasseur@viacesi.fr', 'password' => 'azerty', 'id_rol' => 1],
+            ['id' => 4, 'nom' => 'Forestier', 'prenom' => 'Julien', 'pseudonyme' => 'JulienForestier', 'email' => 'julien.forestier@viacesi.fr', 'password' => 'azerty', 'id_rol' => 1],
+            ['id' => 5, 'nom' => 'Dervaux', 'prenom' => 'Maxime', 'pseudonyme' => 'MaximeDervaux', 'email' => 'maxime.dervaux@viacesi.fr', 'password' => 'azerty', 'id_rol' => 1]
+        ];
+
+        foreach ($userData as $user) {
             User::create([
-                'nom' => $ressource[0],
-                'prenom' => $ressource[1],
-                'pseudonyme' => $ressource[2],
-                'email' => $ressource[3],
-                'password' => $ressource[4],
-                'id_rol' => $ressource[5]
+                'id' => $user['id'],
+                'nom' => $user['nom'],
+                'prenom' => $user['prenom'],
+                'pseudonyme' => $user['pseudonyme'],
+                'email' => $user['email'],
+                'password' => $user['password'],
+                'id_rol' => $user['id_rol']
             ]);
-
         }
     }
 }
+
+
