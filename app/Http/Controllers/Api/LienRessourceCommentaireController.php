@@ -6,13 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLienRessourceCommentaireRequest;
 use App\Http\Requests\UpdateLienRessourceCommentaireRequest;
 use App\Models\LienRessourceCommentaire;
-use Illuminate\Http\Request;
+use App\Services\DefaultService;
+use App\Services\HandleService;
 
 /**
  * @OA\Tag(name="LienRessourceCommentaire")
  */
 class LienRessourceCommentaireController extends Controller
 {
+    public function __construct(
+        protected DefaultService $defaultService,
+        protected HandleService $handleService
+    ) {
+    }
     /**
      * @OA\Get(
      *     path="/api/liensRessourceCommentaire/{id}",
@@ -23,21 +29,15 @@ class LienRessourceCommentaireController extends Controller
      *     @OA\Response(response=404, description="Item not found"),
      *     * )
      */
+
     public function show($id)
     {
         try {
-            $item = LienRessourceCommentaire::where('deleted', false)->findOrFail($id);
-
-            return response()->json([
-                'status' => true,
-                'item' => $item
-            ]);
+            $validatedId = $this->defaultService->checkIdType($id);
+            $item = LienRessourceCommentaire::where('deleted', 0)->findOrFail($validatedId);
+            return $this->handleService->handleSuccessShow($item);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Une erreur s\'est produite.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleError($e);
         }
     }
 
@@ -63,31 +63,16 @@ class LienRessourceCommentaireController extends Controller
      * )
      */
 
-
-    public function store(StoreLienRessourceCommentaireRequest $request)
+    public function store(StoreLienRessourceCommentaireRequest $storeLienRessourceCommentaireRequest)
     {
         try {
-            $validatedData = $request->validated();
-
+            $validatedData = $storeLienRessourceCommentaireRequest->validated();
             $item = LienRessourceCommentaire::create($validatedData);
-
-            return response()->json([
-                'status' => true,
-                'item' => $item,
-                'message' => 'Le commentaire a été créé avec succès.'
-            ], 201);
+            return $this->handleService->handleSuccessStore($item);
         } catch (\Illuminate\Database\QueryException $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Erreur lors de la création du commentaire.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleErrorStore($e);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Une erreur s\'est produite.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleError($e);
         }
     }
 
@@ -111,33 +96,18 @@ class LienRessourceCommentaireController extends Controller
      *     * )
      */
 
-    public function update(UpdateLienRessourceCommentaireRequest $request, $id)
+    public function update(UpdateLienRessourceCommentaireRequest $updateLienRessourceCommentaireRequest, $id)
     {
         try {
-            if (!is_numeric($id) || $id <= 0) {
-                throw new \InvalidArgumentException('L\'ID doit être un nombre entier positif.');
-            }
-            $validatedData = $request->validated();
-            $item = LienRessourceCommentaire::where('deleted', false)->findOrFail($id);
+            $validatedId = $this->defaultService->checkIdType($id);
+            $validatedData = $updateLienRessourceCommentaireRequest->validated();
+            $item = LienRessourceCommentaire::where('deleted', 0)->findOrFail($validatedId);
             $item->update($validatedData);
-
-            return response()->json([
-                'status' => true,
-                'item' => $item,
-                'message' => 'Le commentaire a été mis à jour avec succès.'
-            ]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Le commentaire demandé n\'existe pas.',
-                'error' => $e->getMessage(),
-            ], 404);
+            return $this->handleService->handleSuccessUpdate($item);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return $this->handleService->handleErrorUpdate($e);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Une erreur s\'est produite lors de la mise à jour.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleError($e);
         }
     }
 
@@ -156,27 +126,13 @@ class LienRessourceCommentaireController extends Controller
     public function destroy($id)
     {
         try {
-            if (!is_numeric($id) || $id <= 0) {
-                throw new \InvalidArgumentException('L\'ID doit être un nombre entier positif.');
-            }
-            LienRessourceCommentaire::where('deleted', false)->findOrFail($id)->update(['deleted' => true]);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Le commentaire a été supprimé avec succès.'
-            ]);
+            $validatedId = $this->defaultService->checkIdType($id);
+            LienRessourceCommentaire::where('deleted', 0)->findOrFail($validatedId)->update(['deleted' => true]);
+            return $this->handleService->handleSuccessDestroy();
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Le commentaire demandé n\'existe pas.',
-                'error' => $e->getMessage(),
-            ], 404);
+            return $this->handleService->handleErrorDestroy($e);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Une erreur s\'est produite lors de la suppression.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleError($e);
         }
     }
 }

@@ -5,13 +5,24 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserPhotoProfilRequest;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\TypageIndexRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\LienRessourceUserArchive;
+use App\Models\LienRessourceUserFavoris;
 use App\Models\User;
+use App\Services\DefaultService;
+use App\Services\HandleService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
 class UserController extends Controller
 {
+    public function __construct(
+        protected DefaultService $defaultService,
+        protected HandleService $handleService
+    ) {
+    }
+
     /**
      * @OA\Get(
      *     path="/api/users",
@@ -23,31 +34,37 @@ class UserController extends Controller
      *         description="Number of items to return per page (1-100)",
      *         @OA\Schema(type="integer", minimum=1, maximum=100)
      *     ),
+     *     @OA\Parameter(
+     *         name="keyword",
+     *         in="query",
+     *         description="Keyword for searching items",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_by",
+     *         in="query",
+     *         description="Field to sort items by",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_order",
+     *         in="query",
+     *         description="Sort order (asc or desc)",
+     *         @OA\Schema(type="string", enum={"asc", "desc"})
+     *     ),
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=500, description="Internal server error"),
      * )
      */
-    public function index(Request $request)
+
+    public function index(TypageIndexRequest $typageIndexRequest)
     {
         try {
-            $request->validate([
-                'per_page' => 'integer|min:1|max:100'
-            ]);
-
-            $query = User::query();
-
-            $items = $query->where('deleted', false)->paginate($request->input('per_page', 10));
-
-            return response()->json([
-                'status' => true,
-                'items' => $items
-            ]);
+            $queryModel = User::query()->where('deleted', 0);
+            $items = $this->defaultService->dataIndexBasique($typageIndexRequest, $queryModel, ['nom', 'prenom', 'pseudonyme', 'email', 'id_rol'], []);
+            return $this->handleService->handleSuccessIndex($items);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Une erreur s\'est produite.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleError($e);
         }
     }
 
@@ -61,21 +78,18 @@ class UserController extends Controller
      *     @OA\Response(response=404, description="Item not found"),
      *     * )
      */
+
     public function show($id)
     {
         try {
-            $item = User::where('deleted', false)->findOrFail($id);
-
-            return response()->json([
-                'status' => true,
-                'item' => $item
-            ]);
+            $validatedId = $this->defaultService->checkIdType($id);
+            $user = User::where('deleted', false)->findOrFail($validatedId);
+            $getNombreFavoris = LienRessourceUserFavoris::where('id_user', $validatedId)->where('deleted', 0)->count();
+            $getNombreArchive = LienRessourceUserArchive::where('id_user', $validatedId)->where('deleted', 0)->count();
+            $item = array('user' => $user, 'getNombreFavoris' => $getNombreFavoris, 'getNombreArchive' => $getNombreArchive);
+            return $this->handleService->handleSuccessShow($item);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Une erreur s\'est produite.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleError($e);
         }
     }
 
@@ -87,13 +101,12 @@ class UserController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"nom", "prenom", "pseudonyme", "email", "password", "id_rol"},
+     *             required={"nom", "prenom", "pseudonyme", "email", "password"},
      *             @OA\Property(property="nom", type="string", maxLength=30),
      *                 @OA\Property(property="prenom", type="string", maxLength=30),
      *                 @OA\Property(property="pseudonyme", type="string", maxLength=30),
      *                 @OA\Property(property="email", type="string", maxLength=100),
-     *                 @OA\Property(property="password", type="string", maxLength=255),
-     *                 @OA\Property(property="id_rol", type="integer"),
+     *                 @OA\Property(property="password", type="string", maxLength=255)
      *         )
      *     ),
      *     @OA\Response(response=201, description="Item created successfully"),
@@ -102,47 +115,23 @@ class UserController extends Controller
      *     * )
      */
 
-    public function store(StoreUserRequest $request)
+    public function store(StoreUserRequest $storeUserRequest)
     {
         try {
-            $validatedData = $request->validated();
+            $validatedData = $storeUserRequest->validated();
             $item = User::create([
                 'nom' => $validatedData['nom'],
                 'prenom' => $validatedData['prenom'],
                 'pseudonyme' => $validatedData['pseudonyme'],
                 'email' => $validatedData['email'],
                 'password' => $validatedData['password'],
-                'id_rol' => $validatedData['id_rol'],
+                'id_rol' => 4,
             ]);
-
-
-            // $timestamp = date('d-m-Y_H-i-s');
-            // $chemin = 'photo_profils/' . $item->id . '/';
-            // $nom = $timestamp . '.' . $validatedData['photo_profil']->extension();
-
-            // $validatedData['photo_profil']->move(public_path($chemin), $nom);
-
-            // $item->update([
-            //     'photo_profil' => $chemin . $nom,
-            // ]);
-
-            return response()->json([
-                'status' => true,
-                'item' => $item,
-                'message' => 'L\'utilisateur a été créé avec succès.'
-            ], 201);
+            return $this->handleService->handleSuccessStore($item);
         } catch (\Illuminate\Database\QueryException $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Erreur lors de la création de l\'utilisateur.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleErrorStore($e);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Une erreur s\'est produite.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleError($e);
         }
     }
 
@@ -170,33 +159,22 @@ class UserController extends Controller
      *     * )
      */
 
-    public function update(UpdateUserRequest $updateUserRequest, $id)
+    public function update(Request $request, UpdateUserRequest $updateUserRequest, $id)
     {
         try {
-            if (!is_numeric($id) || $id <= 0) {
-                throw new \InvalidArgumentException('L\'ID doit être un nombre entier positif.');
-            }
-            $validatedData = $updateUserRequest->validated();
-            $item = User::where('deleted', false)->findOrFail($id);
-            $item->update($validatedData);
-
-            return response()->json([
-                'status' => true,
-                'item' => $item,
-                'message' => 'L\'utilisateur a été mis à jour avec succès.'
+            $validatedId = $this->defaultService->checkIdType($id);
+            $request->validate([
+                'pseudonyme' => 'nullable|string|max:30|unique:users,pseudonyme,' . $validatedId,
+                'email' => 'nullable|email|max:255|unique:users,email,' . $validatedId,
             ]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'L\'utilisateur demandé n\'existe pas.',
-                'error' => $e->getMessage(),
-            ], 404);
+            $validatedData = $updateUserRequest->validated();
+            $item = User::where('deleted', 0)->findOrFail($validatedId);
+            $item->update($validatedData);
+            return $this->handleService->handleSuccessUpdate($item);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return $this->handleService->handleErrorUpdate($e);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Une erreur s\'est produite lors de la mise à jour.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleError($e);
         }
     }
 
@@ -215,27 +193,13 @@ class UserController extends Controller
     public function destroy($id)
     {
         try {
-            if (!is_numeric($id) || $id <= 0) {
-                throw new \InvalidArgumentException('L\'ID doit être un nombre entier positif.');
-            }
-            User::where('deleted', false)->findOrFail($id)->update(['deleted' => true]);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'L\'utilisateur a été supprimé avec succès.'
-            ]);
+            $validatedId = $this->defaultService->checkIdType($id);
+            User::where('deleted', 0)->findOrFail($validatedId)->update(['deleted' => true]);
+            return $this->handleService->handleSuccessDestroy();
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'L\'utilisateur demandé n\'existe pas.',
-                'error' => $e->getMessage(),
-            ], 404);
+            return $this->handleService->handleErrorDestroy($e);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Une erreur s\'est produite lors de la suppression.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleError($e);
         }
     }
 
@@ -266,23 +230,22 @@ class UserController extends Controller
      * )
      */
 
-
-    public function storePhotoProfil(StoreUserPhotoProfilRequest $request, $id)
+    public function storePhotoProfil(StoreUserPhotoProfilRequest $storeUserPhotoProfilRequest, $id)
     {
         try {
-            if (!is_numeric($id) || $id <= 0) {
-                throw new \InvalidArgumentException('L\'ID doit être un nombre entier positif.');
-            }
-            $validatedData = $request->validated();
-            $item = User::where('deleted', false)->findOrFail($id);
+            $validatedId = $this->defaultService->checkIdType($id);
+            $validatedData = $storeUserPhotoProfilRequest->validated();
+            $item = User::where('deleted', 0)->findOrFail($validatedId);
             $timestamp = date('d-m-Y_H-i-s');
             $chemin = 'photo_profils/' . $item->id . '/';
             $nom = $timestamp . '.' . $validatedData['photo_profil']->extension();
 
-            $ancienNomFichier = basename($item->photo_profil);
+            if ($item->photo_profil) {
+                $ancienNomFichier = basename($item->photo_profil);
 
-            if (File::exists(public_path($chemin . $ancienNomFichier))) {
-                File::move(public_path($chemin . $ancienNomFichier), public_path($chemin . 'old_' . $ancienNomFichier));
+                if (File::exists(public_path($chemin . $ancienNomFichier))) {
+                    File::move(public_path($chemin . $ancienNomFichier), public_path($chemin . 'old_' . $ancienNomFichier));
+                }
             }
 
             $validatedData['photo_profil']->move(public_path($chemin), $nom);
@@ -290,24 +253,11 @@ class UserController extends Controller
             $item->update([
                 'photo_profil' => $chemin . $nom,
             ]);
-
-            return response()->json([
-                'status' => true,
-                'item' => $item,
-                'message' => 'La photo de profil a été ajoutée avec succès.'
-            ], 201);
+            return $this->handleService->handleSuccessUpdate($item);
         } catch (\Illuminate\Database\QueryException $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Erreur lors de l\'ajout de la photo de profil.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleErrorUpdate($e);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Une erreur s\'est produite.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleError($e);
         }
     }
 }

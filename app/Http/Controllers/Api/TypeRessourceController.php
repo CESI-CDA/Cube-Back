@@ -4,15 +4,23 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTypeRessourceRequest;
+use App\Http\Requests\TypageIndexRequest;
 use App\Http\Requests\UpdateTypeRessourceRequest;
 use App\Models\TypeRessource;
-use Illuminate\Http\Request;
+use App\Services\DefaultService;
+use App\Services\HandleService;
 
 /**
  * @OA\Tag(name="TypeRessource")
  */
 class TypeRessourceController extends Controller
 {
+    public function __construct(
+        protected DefaultService $defaultService,
+        protected HandleService $handleService
+    ) {
+    }
+
     /**
      * @OA\Get(
      *     path="/api/typesRessource",
@@ -24,29 +32,36 @@ class TypeRessourceController extends Controller
      *         description="Number of items to return per page (1-100)",
      *         @OA\Schema(type="integer", minimum=1, maximum=100)
      *     ),
+     *     @OA\Parameter(
+     *         name="keyword",
+     *         in="query",
+     *         description="Keyword for searching items",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_by",
+     *         in="query",
+     *         description="Field to sort items by",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_order",
+     *         in="query",
+     *         description="Sort order (asc or desc)",
+     *         @OA\Schema(type="string", enum={"asc", "desc"})
+     *     ),
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=500, description="Internal server error"),
      * )
      */
-    public function index(Request $request)
+    public function index(TypageIndexRequest $typageIndexRequest)
     {
         try {
-            $request->validate([
-                'per_page' => 'integer|min:1|max:100',
-            ]);
-
-            $items = TypeRessource::where('deleted', false)->paginate($request->input('per_page', 10));
-
-            return response()->json([
-                'status' => true,
-                'items' => $items
-            ]);
+            $queryModel = TypeRessource::query()->where('deleted', 0);
+            $items = $this->defaultService->dataIndexBasique($typageIndexRequest, $queryModel, ['intitule_type_res'], []);
+            return $this->handleService->handleSuccessIndex($items);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Une erreur s\'est produite.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleError($e);
         }
     }
 
@@ -64,18 +79,11 @@ class TypeRessourceController extends Controller
     public function show($id)
     {
         try {
-            $item = TypeRessource::where('deleted', false)->findOrFail($id);
-
-            return response()->json([
-                'status' => true,
-                'item' => $item
-            ]);
+            $validatedId = $this->defaultService->checkIdType($id);
+            $item = TypeRessource::where('deleted', 0)->findOrFail($validatedId);
+            return $this->handleService->handleSuccessShow($item);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Une erreur s\'est produite.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleError($e);
         }
     }
 
@@ -97,30 +105,16 @@ class TypeRessourceController extends Controller
      *     * )
      */
 
-    public function store(StoreTypeRessourceRequest $request)
+    public function store(StoreTypeRessourceRequest $storeTypeRessourceRequest)
     {
         try {
-            $validatedData = $request->validated();
-
+            $validatedData = $storeTypeRessourceRequest->validated();
             $item = TypeRessource::create($validatedData);
-
-            return response()->json([
-                'status' => true,
-                'item' => $item,
-                'message' => 'Le type de ressource a été créé avec succès.'
-            ], 201);
+            return $this->handleService->handleSuccessStore($item);
         } catch (\Illuminate\Database\QueryException $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Erreur lors de la création du type de ressource.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleErrorStore($e);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Une erreur s\'est produite.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleError($e);
         }
     }
 
@@ -144,33 +138,18 @@ class TypeRessourceController extends Controller
      *     * )
      */
 
-    public function update(UpdateTypeRessourceRequest $request, $id)
+    public function update(UpdateTypeRessourceRequest $updateTypeRessourceRequest, $id)
     {
         try {
-            if (!is_numeric($id) || $id <= 0) {
-                throw new \InvalidArgumentException('L\'ID doit être un nombre entier positif.');
-            }
-            $validatedData = $request->validated();
-            $item = TypeRessource::where('deleted', false)->findOrFail($id);
+            $validatedId = $this->defaultService->checkIdType($id);
+            $validatedData = $updateTypeRessourceRequest->validated();
+            $item = TypeRessource::where('deleted', 0)->findOrFail($validatedId);
             $item->update($validatedData);
-
-            return response()->json([
-                'status' => true,
-                'item' => $item,
-                'message' => 'Le type de ressource a été mis à jour avec succès.'
-            ]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Le type de ressource demandé n\'existe pas.',
-                'error' => $e->getMessage(),
-            ], 404);
+            return $this->handleService->handleSuccessUpdate($item);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return $this->handleService->handleErrorUpdate($e);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Une erreur s\'est produite lors de la mise à jour.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleError($e);
         }
     }
 
@@ -189,27 +168,13 @@ class TypeRessourceController extends Controller
     public function destroy($id)
     {
         try {
-            if (!is_numeric($id) || $id <= 0) {
-                throw new \InvalidArgumentException('L\'ID doit être un nombre entier positif.');
-            }
-            TypeRessource::where('deleted', false)->findOrFail($id)->update(['deleted' => true]);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Le type de ressource a été supprimé avec succès.'
-            ]);
+            $validatedId = $this->defaultService->checkIdType($id);
+            TypeRessource::where('deleted', 0)->findOrFail($validatedId)->update(['deleted' => true]);
+            return $this->handleService->handleSuccessDestroy();
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Le type de ressource demandé n\'existe pas.',
-                'error' => $e->getMessage(),
-            ], 404);
+            return $this->handleService->handleErrorDestroy($e);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Une erreur s\'est produite lors de la suppression.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleError($e);
         }
     }
 }
