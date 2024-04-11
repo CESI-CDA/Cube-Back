@@ -24,11 +24,9 @@ class StoreUserRequest extends FormRequest
         return [
             "nom" => "required|string|max:30",
             "prenom" => "required|string|max:30",
-            "pseudonyme" => "required|string|max:30",
-            // "photo_profil" => "nullable|image|mimes:jpg,svg,png|max:2048",
-            "email" => "required|email|max:100",
-            "password" => "required|string|max:255",
-            "id_rol" => "required|integer|exists:role,id"
+            "pseudonyme" => "required|string|unique|max:30",
+            "email" => "required|email|unique|max:100",
+            "password" => "required|string|max:255"
         ];
     }
 }
