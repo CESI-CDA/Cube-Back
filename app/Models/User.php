@@ -27,6 +27,7 @@ class User extends Authenticatable
         'id_rol',
         'deleted'
     ];
+    // TODO : A voir pour enlever password
 
     /**
      * The attributes that should be hidden for serialization.
