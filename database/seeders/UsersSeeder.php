@@ -33,11 +33,11 @@ class UsersSeeder extends Seeder
         $this->truncateTableService->truncateTable('users');
 
         $userData = [
-            ['id' => 1, 'nom' => 'Cuvilliez', 'prenom' => 'Antoine', 'pseudonyme' => 'AntoineCuvilliez', 'email' => 'antoine.cuvilliez@outlook.fr', 'password' => 'azerty', 'id_rol' => 1],
-            ['id' => 2, 'nom' => 'Faucon', 'prenom' => 'Nathan', 'pseudonyme' => 'FauconNathan', 'email' => 'nathan.faucon@viacesi.fr', 'password' => 'azerty', 'id_rol' => 1],
-            ['id' => 3, 'nom' => 'Vasseur', 'prenom' => 'Helene', 'pseudonyme' => 'HeleneVasseur', 'email' => 'helene.vasseur@viacesi.fr', 'password' => 'azerty', 'id_rol' => 1],
-            ['id' => 4, 'nom' => 'Forestier', 'prenom' => 'Julien', 'pseudonyme' => 'JulienForestier', 'email' => 'julien.forestier@viacesi.fr', 'password' => 'azerty', 'id_rol' => 1],
-            ['id' => 5, 'nom' => 'Dervaux', 'prenom' => 'Maxime', 'pseudonyme' => 'MaximeDervaux', 'email' => 'maxime.dervaux@viacesi.fr', 'password' => 'azerty', 'id_rol' => 1]
+            ['id' => 1, 'nom' => 'Cuvilliez', 'prenom' => 'Antoine', 'pseudonyme' => 'AntoineCuvilliez', 'email' => 'antoine.cuvilliez@outlook.fr', 'password' => 'Antoxz59000!', 'id_rol' => 1],
+            ['id' => 2, 'nom' => 'Faucon', 'prenom' => 'Nathan', 'pseudonyme' => 'FauconNathan', 'email' => 'nathan.faucon@viacesi.fr', 'password' => 'Noisyfox59000!', 'id_rol' => 1],
+            ['id' => 3, 'nom' => 'Vasseur', 'prenom' => 'Helene', 'pseudonyme' => 'HeleneVasseur', 'email' => 'helene.vasseur@viacesi.fr', 'password' => 'LnVsr59000!', 'id_rol' => 1],
+            ['id' => 4, 'nom' => 'Forestier', 'prenom' => 'Julien', 'pseudonyme' => 'JulienForestier', 'email' => 'julien.forestier@viacesi.fr', 'password' => 'Bad0ck59000!', 'id_rol' => 1],
+            ['id' => 5, 'nom' => 'Dervaux', 'prenom' => 'Maxime', 'pseudonyme' => 'MaximeDervaux', 'email' => 'maxime.dervaux@viacesi.fr', 'password' => 'Proxyme59000!', 'id_rol' => 1]
         ];
 
         foreach ($userData as $user) {

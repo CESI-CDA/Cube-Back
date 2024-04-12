@@ -32,9 +32,9 @@ class LienRessourceCommentaireSeeder extends Seeder
     {
         $this->truncateTableService->truncateTable('lien_ressource_commentaire');
         $lienRessourceCommentaireData = [
-            ['id' => 1, 'id_res' => 1, 'id_user' => 1, 'date' => now(), 'commentaire' => 'Voici un commentaire', 'id_commentaire_parent' => null],
-            ['id' => 2, 'id_res' => 1, 'id_user' => 2, 'date' => now(), 'commentaire' => 'Voici un sous-commentaire', 'id_commentaire_parent' => 1],
-            ['id' => 3, 'id_res' => 2, 'id_user' => 2, 'date' => now(), 'commentaire' => 'Voici un commentaire', 'id_commentaire_parent' => null]
+            ['id' => 1, 'id_res' => 1, 'id_user' => 1, 'date' => now(), 'commentaire' => 'Super intéressant !', 'id_commentaire_parent' => null],
+            ['id' => 2, 'id_res' => 1, 'id_user' => 2, 'date' => now(), 'commentaire' => 'En effet !', 'id_commentaire_parent' => 1],
+            ['id' => 3, 'id_res' => 2, 'id_user' => 2, 'date' => now(), 'commentaire' => 'Je ne partage pas ton point de vue', 'id_commentaire_parent' => null]
         ];
 
         foreach ($lienRessourceCommentaireData as $lienRessourceCommentaire) {
