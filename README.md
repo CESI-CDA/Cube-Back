@@ -25,7 +25,7 @@ Cette api, développée avec Laravel, est le fruit de l'appel à projet "PROJET 
 ### Étapes d'installation
 
 1. Clonez ce dépôt : `git clone https://github.com/CESI-CDA/Cube-Back.git`
-2. Accédez au répertoire du projet : `cd nom-du-projet`
+2. Accédez au répertoire du projet : `cd Cube-Back`
 3. Installez les dépendances PHP via Composer : `composer install`
 4. Copiez le fichier `.env.example` et renommez-le en `.env`
 5. Générez une clé d'application Laravel : `php artisan key:generate`
