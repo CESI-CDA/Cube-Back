@@ -23,12 +23,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::middleware(['auth:sanctum'])->group(function () {
-    
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
     //---------------------------Ressources----------------------------//
     Route::apiResource('ressources', RessourceController::class);
     Route::get('/liensRessourceUserFavoris/favorisFromUser/{id_user}', [LienRessourceUserFavorisController::class, 'favorisFromUser']);
@@ -51,5 +50,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('relations', RelationController::class);
     Route::apiResource('typesRessource', TypeRessourceController::class);
     Route::apiResource('visibilites', VisibiliteController::class);
-
 });

@@ -17,7 +17,6 @@ return new class extends Migration
             $table->timestamps();
             $table->boolean('deleted')->default(false);
         });
-        Artisan::call('db:seed', array('--class' => 'CategorieSeeder'));
     }
 
     /**

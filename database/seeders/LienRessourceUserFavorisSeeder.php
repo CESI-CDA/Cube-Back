@@ -3,25 +3,46 @@
 namespace Database\Seeders;
 
 use App\Models\LienRessourceUserFavoris;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Services\TruncateTableService;
 use Illuminate\Database\Seeder;
 
 class LienRessourceUserFavorisSeeder extends Seeder
 {
     /**
+     * The TruncateTableService instance.
+     *
+     * @var TruncateTableService
+     */
+    private $truncateTableService;
+
+    /**
+     * Constructor.
+     *
+     * @param TruncateTableService $truncateTableService
+     */
+    public function __construct(TruncateTableService $truncateTableService)
+    {
+        $this->truncateTableService = $truncateTableService;
+    }
+
+    /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $liensRessourceUserFavoris = [[1, 1], [1, 2], [2, 2]];
+        $this->truncateTableService->truncateTable('lien_ressource_user_favoris');
+        $lienRessourceUserFavorisData = [
+            ['id_res' => 1, 'id_user' => 1],
+            ['id_res' => 1, 'id_user' => 2],
+            ['id_res' => 2, 'id_user' => 2]
+        ];
 
-        foreach ($liensRessourceUserFavoris as $lienRessourceUserFavoris)
-        {
+        foreach ($lienRessourceUserFavorisData as $lienRessourceUserFavoris) {
             LienRessourceUserFavoris::create([
-                'id_res' => $lienRessourceUserFavoris[0],
-                'id_user' => $lienRessourceUserFavoris[1]
+                'id_res' => $lienRessourceUserFavoris['id_res'],
+                'id_user' => $lienRessourceUserFavoris['id_user']
             ]);
-
         }
     }
 }
+

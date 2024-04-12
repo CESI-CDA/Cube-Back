@@ -3,22 +3,46 @@
 namespace Database\Seeders;
 
 use App\Models\TypeEtat;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Services\TruncateTableService;
 use Illuminate\Database\Seeder;
 
 class TypeEtatSeeder extends Seeder
 {
     /**
+     * The TruncateTableService instance.
+     *
+     * @var TruncateTableService
+     */
+    private $truncateTableService;
+
+    /**
+     * Constructor.
+     *
+     * @param TruncateTableService $truncateTableService
+     */
+    public function __construct(TruncateTableService $truncateTableService)
+    {
+        $this->truncateTableService = $truncateTableService;
+    }
+
+    /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $intitules = ['En lecture', 'Lu'];
+        $this->truncateTableService->truncateTable('type_etat');
+        $typeEtatData = [
+            ['id' => 1, 'intitule_type_eta' => 'En lecture'],
+            ['id' => 2, 'intitule_type_eta' => 'Lu']
+        ];
 
-        foreach ($intitules as $intitule) {
+        foreach ($typeEtatData as $typeEtat) {
             TypeEtat::create([
-                'intitule_type_eta' => $intitule
+                'id' => $typeEtat['id'],
+                'intitule_type_eta' => $typeEtat['intitule_type_eta']
             ]);
         }
     }
 }
+
+

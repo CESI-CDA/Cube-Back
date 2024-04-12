@@ -3,24 +3,47 @@
 namespace Database\Seeders;
 
 use App\Models\Role;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Services\TruncateTableService;
 use Illuminate\Database\Seeder;
 
 class RoleSeeder extends Seeder
 {
     /**
+     * The TruncateTableService instance.
+     *
+     * @var TruncateTableService
+     */
+    private $truncateTableService;
+
+    /**
+     * Constructor.
+     *
+     * @param TruncateTableService $truncateTableService
+     */
+    public function __construct(TruncateTableService $truncateTableService)
+    {
+        $this->truncateTableService = $truncateTableService;
+    }
+
+    /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $roles = ['Super-administrateur', 'Administrateur', 'Modérateur', 'Citoyen'];
+        $this->truncateTableService->truncateTable('role');
+        $roleData = [
+            ['id' => 1, 'intitule_rol' => 'Super-administrateur'],
+            ['id' => 2, 'intitule_rol' => 'Administrateur'],
+            ['id' => 3, 'intitule_rol' => 'Modérateur'],
+            ['id' => 4, 'intitule_rol' => 'Citoyen']
+        ];
 
-        foreach ($roles as $role) {
+        foreach ($roleData as $role) {
             Role::create([
-                'intitule_rol' => $role
+                'id' => $role['id'],
+                'intitule_rol' => $role['intitule_rol']
             ]);
         }
-
-            
     }
 }
+

@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRessourceRequest;
+use App\Http\Requests\TypageIndexRequest;
 use App\Http\Requests\UpdateRessourceRequest;
 use App\Models\LienRessourceCategorie;
 use App\Models\LienRessourceRelation;
 use App\Models\Ressource;
+use App\Services\DefaultService;
+use App\Services\HandleService;
 use DateTime;
 use Illuminate\Http\Request;
 
@@ -16,6 +19,11 @@ use Illuminate\Http\Request;
  */
 class RessourceController extends Controller
 {
+    public function __construct(
+        protected DefaultService $defaultService,
+        protected HandleService $handleService
+    ) {
+    }
     /**
      * @OA\Get(
      *     path="/api/ressources",
@@ -174,21 +182,15 @@ class RessourceController extends Controller
      *     @OA\Response(response=404, description="Item not found"),
      *     * )
      */
+
     public function show($id)
     {
         try {
-            $item = Ressource::where('deleted', false)->with('getTypeRessource', 'getVisibilite', 'getCreateur', 'getLienRessourceRelation', 'getLienRessourceRelation.getRelationRessource', 'getLienRessourceCategorie', 'getLienRessourceCategorie.getCategorie', 'getLiensRessourceCommentaire')->findOrFail($id);
-
-            return response()->json([
-                'status' => true,
-                'item' => $item
-            ]);
+            $validatedId = $this->defaultService->checkIdType($id);
+            $item = Ressource::where('deleted', 0)->with('getTypeRessource', 'getVisibilite', 'getCreateur', 'getLienRessourceRelation', 'getLienRessourceRelation.getRelationRessource', 'getLienRessourceCategorie', 'getLienRessourceCategorie.getCategorie', 'getLienRessourceCommentaire')->findOrFail($validatedId);
+            return $this->handleService->handleSuccessShow($item);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Une erreur s\'est produite.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleError($e);
         }
     }
 
@@ -217,12 +219,10 @@ class RessourceController extends Controller
      * )
      */
 
-
-    public function store(StoreRessourceRequest $request)
+    public function store(StoreRessourceRequest $storeRessourceRequest)
     {
         try {
-            $validatedData = $request->validated();
-
+            $validatedData = $storeRessourceRequest->validated();
             $ressource = Ressource::create([
                 'titre_res' => $validatedData['titre_res'],
                 'contenu_res' => $validatedData['contenu_res'],
@@ -249,24 +249,11 @@ class RessourceController extends Controller
             }
 
             $item = $ressource->fresh('getLienRessourceRelation', 'getLienRessourceCategorie');
-
-            return response()->json([
-                'status' => true,
-                'item' => $item,
-                'message' => 'La ressource a été créée avec succès.'
-            ], 201);
+            return $this->handleService->handleSuccessStore($item);
         } catch (\Illuminate\Database\QueryException $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Erreur lors de la création de la ressource.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleErrorStore($e);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Une erreur s\'est produite.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleError($e);
         }
     }
 
@@ -298,15 +285,13 @@ class RessourceController extends Controller
      *     * )
      */
 
-    public function update(UpdateRessourceRequest $request, $id)
+    public function update(UpdateRessourceRequest $updateRessourceRequest, $id)
     {
         try {
-            if (!is_numeric($id) || $id <= 0) {
-                throw new \InvalidArgumentException('L\'ID doit être un nombre entier positif.');
-            }
-            $validatedData = $request->validated();
+            $validatedId = $this->defaultService->checkIdType($id);
+            $validatedData = $updateRessourceRequest->validated();
 
-            $ressource = Ressource::where('deleted', false)->findOrFail($id);
+            $ressource = Ressource::where('deleted', false)->findOrFail($validatedId);
 
             $ressource->update([
                 'titre_res' => $validatedData['titre_res'],
@@ -374,23 +359,11 @@ class RessourceController extends Controller
 
             $item = $ressource->fresh('getLienRessourceRelation', 'getLienRessourceCategorie');
 
-            return response()->json([
-                'status' => true,
-                'item' => $item,
-                'message' => 'La ressource a été mise à jour avec succès.'
-            ], 200);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'La ressource demandée n\'existe pas.',
-                'error' => $e->getMessage(),
-            ], 404);
+            return $this->handleService->handleSuccessUpdate($item);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return $this->handleService->handleErrorUpdate($e);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Une erreur s\'est produite lors de la mise à jour.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleError($e);
         }
     }
 
@@ -409,28 +382,13 @@ class RessourceController extends Controller
     public function destroy($id)
     {
         try {
-            if (!is_numeric($id) || $id <= 0) {
-                throw new \InvalidArgumentException('L\'ID doit être un nombre entier positif.');
-            }
-
-            Ressource::findOrFail($id)->update(['deleted' => true]);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'La ressource a été supprimée avec succès.'
-            ]);
+            $validatedId = $this->defaultService->checkIdType($id);
+            Ressource::where('deleted', 0)->findOrFail($validatedId)->update(['deleted' => true]);
+            return $this->handleService->handleSuccessDestroy();
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'La ressource demandée n\'existe pas.',
-                'error' => $e->getMessage(),
-            ], 404);
+            return $this->handleService->handleErrorDestroy($e);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Une erreur s\'est produite lors de la suppression.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleError($e);
         }
     }
 
@@ -445,34 +403,38 @@ class RessourceController extends Controller
      *         description="Number of items to return per page (1-100)",
      *         @OA\Schema(type="integer", minimum=1, maximum=100)
      *     ),
+     *     @OA\Parameter(
+     *         name="keyword",
+     *         in="query",
+     *         description="Keyword for searching items",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_by",
+     *         in="query",
+     *         description="Field to sort items by",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_order",
+     *         in="query",
+     *         description="Sort order (asc or desc)",
+     *         @OA\Schema(type="string", enum={"asc", "desc"})
+     *     ),
      *     @OA\Parameter(name="id_user", in="path", required=true, description="ID of the user"),
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=500, description="Internal server error"),
      * )
      */
-    public function ressourcesCreeFromUtilisateur(Request $request, $id_user)
+
+    public function ressourcesCreeFromUtilisateur(TypageIndexRequest $typageIndexRequest, $id_user)
     {
         try {
-            $request->validate([
-                'per_page' => 'integer|min:1|max:100',
-            ]);
-
-            $query = Ressource::query()->where('deleted', false)->where('id_createur', $id_user);
-
-            $query->orderBy('date_creation', 'desc');
-
-            $items = $query->paginate($request->input('per_page', 10));
-
-            return response()->json([
-                'status' => true,
-                'items' => $items
-            ]);
+            $queryModel = Ressource::query()->where('deleted', 0)->where('id_createur', $id_user);
+            $items = $this->defaultService->dataIndexBasique($typageIndexRequest, $queryModel, ['titre_res'], ['getTypeRessource', 'getVisibilite', 'getCreateur', 'getLienRessourceRelation', 'getLienRessourceRelation.getRelationRessource', 'getLienRessourceCategorie', 'getLienRessourceCategorie.getCategorie']);
+            return $this->handleService->handleSuccessIndex($items);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Une erreur s\'est produite.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->handleService->handleError($e);
         }
     }
 }
