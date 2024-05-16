@@ -15,7 +15,7 @@ class AuthenticatedSessionController extends Controller
      * Handle an incoming authentication request.
      */
 
-     /**
+    /**
      * @OA\Post(
      *     path="/api/login",
      *     summary="Login",
@@ -33,27 +33,29 @@ class AuthenticatedSessionController extends Controller
      *     @OA\Response(response=500, description="Internal server error"),
      *     * )
      */
-    public function store(LoginRequest $request):JsonResponse
+    public function store(LoginRequest $request): JsonResponse
     {
         $request->authenticate();
 
-        $user = $request->user();
+        $user = $request->user()->select('id', 'nom', 'prenom', 'pseudonyme', 'email', 'id_rol')->first();
 
         $user->tokens()->delete();
 
-        $token = $user->createToken('api-token');
+        $token = $user->createToken('api-token')->plainTextToken;
+
+        $cookie = cookie('auth-user', json_encode(['user' => $user, 'api-token' => $token]), 90);
 
         return response()->json([
             'user' => $user,
-            'token' => $token->plainTextToken
-        ]);
+            'token' => $token
+        ])->withCookie($cookie);
     }
 
     /**
      * Destroy an authenticated session.
      */
 
-     /**
+    /**
      * @OA\Post(
      *     path="/api/logout",
      *     summary="Logout",
