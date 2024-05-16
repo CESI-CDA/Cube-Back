@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedSessionController extends Controller
@@ -41,14 +40,15 @@ class AuthenticatedSessionController extends Controller
 
         $user->tokens()->delete();
 
-        $token = $user->createToken('api-token')->plainTextToken;
+        $token = $user->createToken('api-token', ['server:update'])->plainTextToken;
 
-        $cookie = cookie('auth-user', json_encode(['user' => $user, 'api-token' => $token]), 90);
+    
+        $request->session()->regenerate();
 
         return response()->json([
             'user' => $user,
             'token' => $token
-        ])->withCookie($cookie);
+        ]);
     }
 
     /**
