@@ -37,7 +37,7 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
-        $user = $request->user()->select('id', 'nom', 'prenom', 'pseudonyme', 'email', 'id_rol')->first();
+        $user = $request->user();
 
         $user->tokens()->delete();
 
