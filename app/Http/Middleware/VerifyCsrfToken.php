@@ -14,4 +14,14 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         '*'
     ];
+
+    // protected function shouldPassThrough($request)
+    // {
+    //     // Vérifiez si la demande est une requête mobile
+    //     if ($request->header('X-Mobile-Request') == 'true') {
+    //         return true;
+    //     }
+
+    //     return parent::shouldPassThrough($request);
+    // }
 }
