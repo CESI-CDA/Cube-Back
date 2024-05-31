@@ -67,7 +67,14 @@ class LienRessourceCommentaireController extends Controller
     {
         try {
             $validatedData = $storeLienRessourceCommentaireRequest->validated();
-            $item = LienRessourceCommentaire::create($validatedData);
+            $item = LienRessourceCommentaire::create([
+                'id_res' => $validatedData['id_res'],
+                'id_user' => $validatedData['id_user'],
+                'date' => $validatedData['date'],
+                'commentaire' => $validatedData['commentaire'],
+                'id_commentaire_parent' => $validatedData['id_commentaire_parent'],
+                'id_etat' => 1,
+            ]);
             return $this->handleService->handleSuccessStore($item);
         } catch (\Illuminate\Database\QueryException $e) {
             return $this->handleService->handleErrorStore($e);
