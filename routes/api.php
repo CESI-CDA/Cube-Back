@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\CategorieController;
 use App\Http\Controllers\Api\LienRessourceCommentaireController;
 use App\Http\Controllers\Api\LienRessourceUserArchiveController;
 use App\Http\Controllers\Api\LienRessourceUserFavorisController;
+use App\Http\Controllers\Api\LienUserRestrictionController;
 use App\Http\Controllers\Api\RelationController;
 use App\Http\Controllers\Api\RessourceController;
 use App\Http\Controllers\Api\TypeRessourceController;
@@ -50,4 +51,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('relations', RelationController::class);
     Route::apiResource('typesRessource', TypeRessourceController::class);
     Route::apiResource('visibilites', VisibiliteController::class);
+
+    Route::apiResource('liens-user-restriction', LienUserRestrictionController::class);
 });

@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -34,21 +38,35 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): JsonResponse
     {
-        $request->authenticate();
+        try {
+            $request->authenticate();
 
-        $user = $request->user();
+            $user = $request->user();
 
-        $user->tokens()->delete();
+            $user->tokens()->delete();
 
-        $token = $user->createToken('api-token', ['server:update'])->plainTextToken;
+            $bannedUser = User::whereHas('getLienUserRestriction')->find($user->id);
+            if ($bannedUser) {
+                $dateRestriction = $user->getLienUserRestriction()->first();
+                Auth::guard('web')->logout();
+                $request->session()->invalidate();
+                
+                return response()->json([
+                    'message' => 'L\'utilisateur est restreint jusqu\'au ' . Carbon::parse($dateRestriction->date)->format('d-m-Y h:i:s') . ' pour la raison : ' . $dateRestriction->commentaire
+                ], 401);
+            } else {
+                $token = $user->createToken('api-token', ['server:update'])->plainTextToken;
 
-    
-        $request->session()->regenerate();
+                $request->session()->regenerate();
 
-        return response()->json([
-            'user' => $user,
-            'token' => $token
-        ]);
+                return response()->json([
+                    'user' => $user,
+                    'token' => $token
+                ]);
+            }
+        } catch (Exception $e) {
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 401);
+        }
     }
 
     /**
@@ -73,7 +91,7 @@ class AuthenticatedSessionController extends Controller
 
         Auth::guard('web')->logout();
 
-        // $request->session()->invalidate();
+        $request->session()->invalidate();
 
         // $request->session()->regenerateToken();
 

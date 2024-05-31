@@ -21,12 +21,12 @@ class DatabaseSeeder extends Seeder
         $this->call(VisibiliteSeeder::class);
         $this->call(RessourceSeeder::class);
         $this->call(LienRessourceCategorieSeeder::class);
-        // $this->call(EtatCommentaireSeeder::class);
-        $this->call(LienRessourceCommentaireSeeder::class);
         $this->call(LienRessourceRelationSeeder::class);
         $this->call(LienRessourceUserArchiveSeeder::class);
         $this->call(LienRessourceUserEtatSeeder::class);
         $this->call(LienRessourceUserFavorisSeeder::class);
-        // $this->call(LienUserRestrictionSeeder::class);
+        $this->call(LienUserRestrictionSeeder::class);
+        // $this->call(EtatCommentaireSeeder::class);
+        $this->call(LienRessourceCommentaireSeeder::class);
     }
 }
