@@ -155,7 +155,7 @@ return [
     |
     */
 
-    'domain' => env('SESSION_DOMAIN'),
+    'driver' => env('SESSION_DRIVER', 'database'),
 
     /*
     |--------------------------------------------------------------------------
@@ -210,5 +210,7 @@ return [
     */
 
     'partitioned' => false,
+
+    'domain' => env('SESSION_DOMAIN', null),
 
 ];
