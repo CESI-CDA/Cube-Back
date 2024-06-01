@@ -27,7 +27,7 @@ class LienUserRestrictionController extends Controller
     /**
      * @OA\Get(
      *     path="/api/liens-user-restriction",
-     *     summary="Récupérer toutes les ressources",
+     *     summary="Récupérer toutes les restrictions des utilisateurs",
      *     tags={"LienUserRestriction"},
      *     @OA\Parameter(
      *         name="per_page",
@@ -73,7 +73,7 @@ class LienUserRestrictionController extends Controller
     /**
      * @OA\Get(
      *     path="/api/liens-user-restriction/{id}",
-     *     summary="Récupérer une catégorie spécifique",
+     *     summary="Récupérer une restriction spécifique",
      *     tags={"LienUserRestriction"},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID of the item"),
      *     @OA\Response(response=200, description="Successful operation"),
@@ -95,7 +95,7 @@ class LienUserRestrictionController extends Controller
     /**
      * @OA\Post(
      *     path="/api/liens-user-restriction",
-     *     summary="Restreindre un user",
+     *     summary="Restreindre un utilisateur",
      *     tags={"LienUserRestriction"},
      *     @OA\RequestBody(
      *         required=true,
