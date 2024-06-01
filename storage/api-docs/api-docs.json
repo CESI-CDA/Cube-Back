@@ -391,6 +391,115 @@
                 }
             }
         },
+        "/api/liensRessourceCommentaire": {
+            "get": {
+                "tags": [
+                    "LienRessourceCommentaire"
+                ],
+                "summary": "Récupérer toutes les commentaires en attente",
+                "operationId": "4ced0da32d453d7fa033f6ecb9ce9f0e",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items to return per page (1-100)",
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 100,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Keyword for searching items",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Field to sort items by",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Sort order (asc or desc)",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "LienRessourceCommentaire"
+                ],
+                "summary": "Créer un commentaire",
+                "operationId": "94de2547dde8ec86ac16ce93d74ee9c0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_res",
+                                    "id_user",
+                                    "date",
+                                    "commentaire"
+                                ],
+                                "properties": {
+                                    "id_res": {
+                                        "type": "integer"
+                                    },
+                                    "id_user": {
+                                        "type": "integer"
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "example": "2024-04-04 07:13:21"
+                                    },
+                                    "commentaire": {
+                                        "type": "string"
+                                    },
+                                    "id_commentaire_parent": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Item créé avec succès"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    },
+                    "500": {
+                        "description": "Erreur interne du serveur"
+                    }
+                }
+            }
+        },
         "/api/liensRessourceCommentaire/{id}": {
             "get": {
                 "tags": [
@@ -485,60 +594,6 @@
                     },
                     "500": {
                         "description": "Internal server error"
-                    }
-                }
-            }
-        },
-        "/api/liensRessourceCommentaire": {
-            "post": {
-                "tags": [
-                    "LienRessourceCommentaire"
-                ],
-                "summary": "Créer un commentaire",
-                "operationId": "94de2547dde8ec86ac16ce93d74ee9c0",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "id_res",
-                                    "id_user",
-                                    "date",
-                                    "commentaire"
-                                ],
-                                "properties": {
-                                    "id_res": {
-                                        "type": "integer"
-                                    },
-                                    "id_user": {
-                                        "type": "integer"
-                                    },
-                                    "date": {
-                                        "type": "string",
-                                        "example": "2024-04-04 07:13:21"
-                                    },
-                                    "commentaire": {
-                                        "type": "string"
-                                    },
-                                    "id_commentaire_parent": {
-                                        "type": "integer"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Item créé avec succès"
-                    },
-                    "422": {
-                        "description": "Erreur de validation"
-                    },
-                    "500": {
-                        "description": "Erreur interne du serveur"
                     }
                 }
             }

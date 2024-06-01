@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLienRessourceCommentaireRequest;
+use App\Http\Requests\TypageIndexRequest;
 use App\Http\Requests\UpdateEtatLienRessourceCommentaireRequest;
 use App\Http\Requests\UpdateLienRessourceCommentaireRequest;
 use App\Models\LienRessourceCommentaire;
@@ -19,6 +20,50 @@ class LienRessourceCommentaireController extends Controller
         protected DefaultService $defaultService,
         protected HandleService $handleService
     ) {
+    }
+    /**
+     * @OA\Get(
+     *     path="/api/liensRessourceCommentaire",
+     *     summary="Récupérer toutes les commentaires en attente",
+     *     tags={"LienRessourceCommentaire"},
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         description="Number of items to return per page (1-100)",
+     *         @OA\Schema(type="integer", minimum=1, maximum=100)
+     *     ),
+     *     @OA\Parameter(
+     *         name="keyword",
+     *         in="query",
+     *         description="Keyword for searching items",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_by",
+     *         in="query",
+     *         description="Field to sort items by",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_order",
+     *         in="query",
+     *         description="Sort order (asc or desc)",
+     *         @OA\Schema(type="string", enum={"asc", "desc"})
+     *     ),
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=500, description="Internal server error"),
+     * )
+     */
+
+    public function index(TypageIndexRequest $typageIndexRequest)
+    {
+        try {
+            $queryModel = LienRessourceCommentaire::query()->where('deleted', 0)->where('id_etat', 1);
+            $items = $this->defaultService->dataIndexBasique($typageIndexRequest, $queryModel, ['date', 'commentaire'], []);
+            return $this->handleService->handleSuccessIndex($items);
+        } catch (\Exception $e) {
+            return $this->handleService->handleError($e);
+        }
     }
     /**
      * @OA\Get(
