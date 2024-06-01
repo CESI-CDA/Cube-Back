@@ -118,7 +118,6 @@ class LienUserRestrictionController extends Controller
             $item = LienUserRestriction::create($validatedData);
             $userRestricted = User::where('deleted', 0)->findOrFail($validatedData['id_user']);
             $userRestricted->tokens()->delete();
-            DB::table('sessions')->where('user_id', $userRestricted->id)->delete();
             return $this->handleService->handleSuccessStore($item);
         } catch (\Illuminate\Database\QueryException $e) {
             return $this->handleService->handleErrorStore($e);
