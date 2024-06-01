@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(LienRessourceUserEtatSeeder::class);
         $this->call(LienRessourceUserFavorisSeeder::class);
         $this->call(LienUserRestrictionSeeder::class);
-        // $this->call(EtatCommentaireSeeder::class);
+        $this->call(EtatCommentaireSeeder::class);
         $this->call(LienRessourceCommentaireSeeder::class);
     }
 }

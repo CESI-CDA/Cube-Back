@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLienRessourceCommentaireRequest;
+use App\Http\Requests\UpdateEtatLienRessourceCommentaireRequest;
 use App\Http\Requests\UpdateLienRessourceCommentaireRequest;
 use App\Models\LienRessourceCommentaire;
 use App\Services\DefaultService;
@@ -138,6 +139,41 @@ class LienRessourceCommentaireController extends Controller
             return $this->handleService->handleSuccessDestroy();
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return $this->handleService->handleErrorDestroy($e);
+        } catch (\Exception $e) {
+            return $this->handleService->handleError($e);
+        }
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/api/liensRessourceCommentaire/update-etat/{id}",
+     *     summary="Modifier l'état d'un commentaire",
+     *     tags={"LienRessourceCommentaire"},
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID of the item"),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"id_etat"},
+     *             @OA\Property(property="id_etat",  type="integer")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Item updated successfully"),
+     *     @OA\Response(response=404, description="Item not found"),
+     *     @OA\Response(response=422, description="Validation error"),
+     *     @OA\Response(response=500, description="Internal server error"),
+     *     * )
+     */
+
+    public function updateEtat(UpdateEtatLienRessourceCommentaireRequest $updateEtatLienRessourceCommentaireRequest, $id)
+    {
+        try {
+            $validatedId = $this->defaultService->checkIdType($id);
+            $validatedData = $updateEtatLienRessourceCommentaireRequest->validated();
+            $item = LienRessourceCommentaire::where('deleted', 0)->findOrFail($validatedId);
+            $item->update($validatedData);
+            return $this->handleService->handleSuccessUpdate($item);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return $this->handleService->handleErrorUpdate($e);
         } catch (\Exception $e) {
             return $this->handleService->handleError($e);
         }

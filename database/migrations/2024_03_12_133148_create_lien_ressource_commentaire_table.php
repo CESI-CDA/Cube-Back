@@ -18,6 +18,7 @@ return new class extends Migration
             $table->dateTime('date');
             $table->longText('commentaire');
             $table->foreignId('id_commentaire_parent')->nullable()->constrained('lien_ressource_commentaire');
+            $table->foreignId('id_etat')->constrained('etat_commentaire');
             $table->timestamps();
             $table->boolean('deleted')->default(false);
         });

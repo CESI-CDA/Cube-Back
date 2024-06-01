@@ -10,6 +10,6 @@ class LienRessourceCommentaire extends Model
     use HasFactory;
 
     protected $table = 'lien_ressource_commentaire';
-    protected $fillable = ['id_res', 'id_user', 'date', 'commentaire', 'id_commentaire_parent', 'deleted'];
+    protected $fillable = ['id_res', 'id_user', 'date', 'commentaire', 'id_commentaire_parent', 'id_etat', 'deleted'];
     public $timestamps = true;
 }

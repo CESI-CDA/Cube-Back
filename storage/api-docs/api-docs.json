@@ -10,7 +10,7 @@
                 "tags": [
                     "Categorie"
                 ],
-                "summary": "Récupérer toutes les ressources",
+                "summary": "Récupérer toutes les catégories",
                 "operationId": "d753b5a85d077f3a311df9eb28de8a1a",
                 "parameters": [
                     {
@@ -198,6 +198,199 @@
                 }
             }
         },
+        "/api/etat-commentaire": {
+            "get": {
+                "tags": [
+                    "EtatCommentaire"
+                ],
+                "summary": "Récupérer tout les états des commentaires",
+                "operationId": "9d34986783ac1dbbc8989028409a74dc",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items to return per page (1-100)",
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 100,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Keyword for searching items",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Field to sort items by",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Sort order (asc or desc)",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "EtatCommentaire"
+                ],
+                "summary": "Créer un état de commentaire",
+                "operationId": "045c4d30bb56605fd71dff49d16c5f59",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "intitule"
+                                ],
+                                "properties": {
+                                    "intitule": {
+                                        "type": "string",
+                                        "maxLength": 50
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Item created successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/etat-commentaire/{id}": {
+            "get": {
+                "tags": [
+                    "EtatCommentaire"
+                ],
+                "summary": "Récupérer un état de commentaire spécifique",
+                "operationId": "2df442b2734391b3306f568f233241c1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "EtatCommentaire"
+                ],
+                "summary": "Modifier un état de commentaire",
+                "operationId": "afb1b70f710ee34340a9ba686d8c6006",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "intitule"
+                                ],
+                                "properties": {
+                                    "intitule": {
+                                        "type": "string",
+                                        "maxLength": 50
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Item updated successfully"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "EtatCommentaire"
+                ],
+                "summary": "Supprimer un état de commentaire",
+                "operationId": "c4e543a839c7460c20243697f7aebc93",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item deleted successfully"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
         "/api/liensRessourceCommentaire/{id}": {
             "get": {
                 "tags": [
@@ -350,6 +543,55 @@
                 }
             }
         },
+        "/api/liensRessourceCommentaire/update-etat/{id}": {
+            "put": {
+                "tags": [
+                    "LienRessourceCommentaire"
+                ],
+                "summary": "Modifier l'état d'un commentaire",
+                "operationId": "04fe86c7ffb7c0601c7e74f34d68d04e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_etat"
+                                ],
+                                "properties": {
+                                    "id_etat": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Item updated successfully"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
         "/api/liensRessourceUserArchive/archivesFromUser/{id_user}": {
             "get": {
                 "tags": [
@@ -418,7 +660,7 @@
                 "tags": [
                     "LienRessourceUserArchive"
                 ],
-                "summary": "Récupérer une lien d'archivage entre la ressource et l'utilisateur",
+                "summary": "Récupérer un lien d'archivage entre la ressource et l'utilisateur",
                 "operationId": "233e431dccd556546b89c2a699ece432",
                 "parameters": [
                     {
@@ -447,7 +689,7 @@
                 "tags": [
                     "LienRessourceUserArchive"
                 ],
-                "summary": "Supprimer une ressource des archives",
+                "summary": "Supprimer un lien d'archivage entre la ressource et l'utilisateur",
                 "operationId": "8712d8ab643737a3394fdca9879fdf54",
                 "parameters": [
                     {
@@ -586,7 +828,7 @@
                 "tags": [
                     "LienRessourceUserFavoris"
                 ],
-                "summary": "Récupérer une lien favoris entre la ressource et l'utilisateur",
+                "summary": "Récupérer un lien favoris entre la ressource et l'utilisateur",
                 "operationId": "c571be1d0bdc81539f0d45b8500901c5",
                 "parameters": [
                     {
@@ -615,7 +857,7 @@
                 "tags": [
                     "LienRessourceUserFavoris"
                 ],
-                "summary": "Supprimer une ressource des favoris",
+                "summary": "Supprimer un lien favoris entre la ressource et l'utilisateur",
                 "operationId": "1f80a99a42f14706221b6aa64f0ed028",
                 "parameters": [
                     {
@@ -691,7 +933,7 @@
                 "tags": [
                     "LienUserRestriction"
                 ],
-                "summary": "Récupérer toutes les ressources",
+                "summary": "Récupérer toutes les restrictions des utilisateurs",
                 "operationId": "2af2a3ff1395aafcfa2f9f9bae1ac12c",
                 "parameters": [
                     {
@@ -746,7 +988,7 @@
                 "tags": [
                     "LienUserRestriction"
                 ],
-                "summary": "Restreindre un user",
+                "summary": "Restreindre un utilisateur",
                 "operationId": "1998e674b24368ddf7e822910b174f43",
                 "requestBody": {
                     "required": true,
@@ -792,7 +1034,7 @@
                 "tags": [
                     "LienUserRestriction"
                 ],
-                "summary": "Récupérer une catégorie spécifique",
+                "summary": "Récupérer une restriction spécifique",
                 "operationId": "fd1e38b617f0adaf3712c3f071c5d7bd",
                 "parameters": [
                     {
@@ -2258,6 +2500,9 @@
     "tags": [
         {
             "name": "Categorie"
+        },
+        {
+            "name": "EtatCommentaire"
         },
         {
             "name": "LienRessourceCommentaire"
