@@ -42,7 +42,7 @@ class Ressource extends Model
 
     public function getLienRessourceCommentaire(): HasMany
     {
-        return $this->hasMany(LienRessourceCommentaire::class, 'id_res', 'id')->where('deleted', false)->select(['id', 'id_res', 'id_user', 'date', 'commentaire', 'id_commentaire_parent']);
+        return $this->hasMany(LienRessourceCommentaire::class, 'id_res', 'id')->where('deleted', false)->where('id_etat', 2)->select(['id', 'id_res', 'id_user', 'date', 'commentaire', 'id_commentaire_parent', 'id_etat']);
     }
 
     

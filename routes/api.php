@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CategorieController;
+use App\Http\Controllers\Api\EtatCommentaireController;
 use App\Http\Controllers\Api\LienRessourceCommentaireController;
 use App\Http\Controllers\Api\LienRessourceUserArchiveController;
 use App\Http\Controllers\Api\LienRessourceUserFavorisController;
@@ -30,7 +31,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     //---------------------------Ressources----------------------------//
-    Route::apiResource('ressources', RessourceController::class);
     Route::get('/liensRessourceUserFavoris/favorisFromUser/{id_user}', [LienRessourceUserFavorisController::class, 'favorisFromUser']);
     Route::delete('/liensRessourceUserFavoris/{id_res}/{id_user}', [LienRessourceUserFavorisController::class, 'destroy']);
     Route::get('/liensRessourceUserFavoris/{id_res}/{id_user}', [LienRessourceUserFavorisController::class, 'show']);
@@ -41,16 +41,20 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/liensRessourceUserArchive/{id_res}/{id_user}', [LienRessourceUserArchiveController::class, 'show']);
     Route::apiResource('liensRessourceUserArchive', LienRessourceUserArchiveController::class);
     Route::apiResource('liensRessourceCommentaire', LienRessourceCommentaireController::class);
+    Route::put('/liensRessourceCommentaire/update-etat/{id}', [LienRessourceCommentaireController::class, 'updateEtat']);
 
     //---------------------------Users----------------------------//
     Route::apiResource('users', UserController::class);
     Route::post('/users/storePhotoProfil/{id}', [UserController::class, 'storePhotoProfil']);
+    Route::apiResource('liens-user-restriction', LienUserRestrictionController::class);
 
     //---------------------------Commun----------------------------//
     Route::apiResource('categories', CategorieController::class);
     Route::apiResource('relations', RelationController::class);
     Route::apiResource('typesRessource', TypeRessourceController::class);
     Route::apiResource('visibilites', VisibiliteController::class);
+    Route::apiResource('etat-commentaire', EtatCommentaireController::class);
 
-    Route::apiResource('liens-user-restriction', LienUserRestrictionController::class);
 });
+
+Route::apiResource('ressources', RessourceController::class);
