@@ -82,7 +82,7 @@ class LienRessourceUserArchiveController extends Controller
     /**
      * @OA\Get(
      *     path="/api/liensRessourceUserArchive/{id_res}/{id_user}",
-     *     summary="Récupérer une lien d'archivage entre la ressource et l'utilisateur",
+     *     summary="Récupérer un lien d'archivage entre la ressource et l'utilisateur",
      *     tags={"LienRessourceUserArchive"},
      *     @OA\Parameter(name="id_res", in="path", required=true, description="ID of the item"),
      *     @OA\Parameter(name="id_user", in="path", required=true, description="ID of the item"),
@@ -148,7 +148,7 @@ class LienRessourceUserArchiveController extends Controller
     /**
      * @OA\Delete(
      *     path="/api/liensRessourceUserArchive/{id_res}/{id_user}",
-     *     summary="Supprimer une ressource des archives",
+     *     summary="Supprimer un lien d'archivage entre la ressource et l'utilisateur",
      *     tags={"LienRessourceUserArchive"},
      *     @OA\Parameter(name="id_res", in="path", required=true, description="ID of the ressource"),
      *     @OA\Parameter(name="id_user", in="path", required=true, description="ID of the user"),

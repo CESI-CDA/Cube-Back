@@ -80,7 +80,7 @@ class LienRessourceUserFavorisController extends Controller
     /**
      * @OA\Get(
      *     path="/api/liensRessourceUserFavoris/{id_res}/{id_user}",
-     *     summary="Récupérer une lien favoris entre la ressource et l'utilisateur",
+     *     summary="Récupérer un lien favoris entre la ressource et l'utilisateur",
      *     tags={"LienRessourceUserFavoris"},
      *     @OA\Parameter(name="id_res", in="path", required=true, description="ID of the item"),
      *     @OA\Parameter(name="id_user", in="path", required=true, description="ID of the item"),
@@ -145,7 +145,7 @@ class LienRessourceUserFavorisController extends Controller
     /**
      * @OA\Delete(
      *     path="/api/liensRessourceUserFavoris/{id_res}/{id_user}",
-     *     summary="Supprimer une ressource des favoris",
+     *     summary="Supprimer un lien favoris entre la ressource et l'utilisateur",
      *     tags={"LienRessourceUserFavoris"},
      *     @OA\Parameter(name="id_res", in="path", required=true, description="ID of the ressource"),
      *     @OA\Parameter(name="id_user", in="path", required=true, description="ID of the user"),

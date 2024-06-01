@@ -24,7 +24,7 @@ class CategorieController extends Controller
     /**
      * @OA\Get(
      *     path="/api/categories",
-     *     summary="Récupérer toutes les ressources",
+     *     summary="Récupérer toutes les catégories",
      *     tags={"Categorie"},
      *     @OA\Parameter(
      *         name="per_page",
