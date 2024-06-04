@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules;
 
 class StoreUserRequest extends FormRequest
 {
@@ -22,11 +23,11 @@ class StoreUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "nom" => "required|string|max:30",
-            "prenom" => "required|string|max:30",
-            "pseudonyme" => "required|string|unique:users,pseudonyme|max:30",
-            "email" => "required|email|unique:users,email|max:100",
-            "password" => "required|string|max:255"
+            'nom' => 'required|string|max:30',
+            'prenom' => 'required|string|max:30',
+            'pseudonyme' => 'required|string|unique:users,pseudonyme|max:30',
+            'email' => 'required|email|unique:users,email|max:100',
+            'id_rol' => 'required|integer|exists:role,id'
         ];
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\StoreUserPhotoProfilRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\TypageIndexRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Mail\WelcomeUserMail;
 use App\Models\LienRessourceUserArchive;
 use App\Models\LienRessourceUserFavoris;
 use App\Models\User;
@@ -14,6 +15,9 @@ use App\Services\DefaultService;
 use App\Services\HandleService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -101,12 +105,12 @@ class UserController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"nom", "prenom", "pseudonyme", "email", "password"},
-     *             @OA\Property(property="nom", type="string", maxLength=30),
+     *             required={"nom", "prenom", "pseudonyme", "email", "password", "id_rol"},
+     *                 @OA\Property(property="nom", type="string", maxLength=30),
      *                 @OA\Property(property="prenom", type="string", maxLength=30),
      *                 @OA\Property(property="pseudonyme", type="string", maxLength=30),
      *                 @OA\Property(property="email", type="string", maxLength=100),
-     *                 @OA\Property(property="password", type="string", maxLength=255)
+     *                 @OA\Property(property="id_rol", type="integer")
      *         )
      *     ),
      *     @OA\Response(response=201, description="Item created successfully"),
@@ -118,15 +122,21 @@ class UserController extends Controller
     public function store(StoreUserRequest $storeUserRequest)
     {
         try {
+            $randomPassword = Str::random(12);
             $validatedData = $storeUserRequest->validated();
             $item = User::create([
                 'nom' => $validatedData['nom'],
                 'prenom' => $validatedData['prenom'],
                 'pseudonyme' => $validatedData['pseudonyme'],
                 'email' => $validatedData['email'],
-                'password' => $validatedData['password'],
-                'id_rol' => 4,
+                'id_rol' => $validatedData['id_rol'],
+                'password' => Hash::make($randomPassword),
             ]);
+            $infos = [
+                'password' => $randomPassword,
+                'url' => env('FRONTEND_URL').'/login'
+            ];
+            Mail::to($item->email)->send(new WelcomeUserMail($infos));
             return $this->handleService->handleSuccessStore($item);
         } catch (\Illuminate\Database\QueryException $e) {
             return $this->handleService->handleErrorStore($e);
