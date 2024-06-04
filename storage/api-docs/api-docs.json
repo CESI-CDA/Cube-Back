@@ -2010,7 +2010,8 @@
                                     "prenom",
                                     "pseudonyme",
                                     "email",
-                                    "password"
+                                    "password",
+                                    "id_rol"
                                 ],
                                 "properties": {
                                     "nom": {
@@ -2029,9 +2030,8 @@
                                         "type": "string",
                                         "maxLength": 100
                                     },
-                                    "password": {
-                                        "type": "string",
-                                        "maxLength": 255
+                                    "id_rol": {
+                                        "type": "integer"
                                     }
                                 },
                                 "type": "object"
