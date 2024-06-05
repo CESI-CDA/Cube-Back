@@ -61,19 +61,14 @@ class LienRessourceUserArchiveController extends Controller
      * )
      */
 
-     //A REVOIR
+    //A REVOIR
     public function archivesFromUser(TypageIndexRequest $typageIndexRequest, $id_user)
     {
         try {
             $validatedIdUser = $this->defaultService->checkIdType($id_user);
             $queryModel = LienRessourceUserArchive::query()->where('deleted', 0)->where('id_user', $validatedIdUser);
-            $result = $queryModel->exists();
-            if (!$result) {
-                throw new ModelNotFoundException("Aucun résultat pour l'utilisateur spécifié");
-            } else {
-                $items = $this->defaultService->dataIndexBasique($typageIndexRequest, $queryModel, ['id_res'], []);
-                return $this->handleService->handleSuccessIndex($items);
-            }
+            $items = $this->defaultService->dataIndexBasique($typageIndexRequest, $queryModel, ['id_res'], []);
+            return $this->handleService->handleSuccessIndex($items);
         } catch (\Exception $e) {
             return $this->handleService->handleError($e);
         }

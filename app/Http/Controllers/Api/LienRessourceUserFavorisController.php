@@ -65,13 +65,8 @@ class LienRessourceUserFavorisController extends Controller
         try {
             $validatedIdUser = $this->defaultService->checkIdType($id_user);
             $queryModel = LienRessourceUserFavoris::query()->where('deleted', 0)->where('id_user', $validatedIdUser);
-            $result = $queryModel->exists();
-            if (!$result) {
-                throw new ModelNotFoundException("Aucun résultat pour l'utilisateur spécifié");
-            } else {
-                $items = $this->defaultService->dataIndexBasique($typageIndexRequest, $queryModel, ['id_res'], []);
-                return $this->handleService->handleSuccessIndex($items);
-            }
+            $items = $this->defaultService->dataIndexBasique($typageIndexRequest, $queryModel, ['id_res'], []);
+            return $this->handleService->handleSuccessIndex($items);
         } catch (\Exception $e) {
             return $this->handleService->handleError($e);
         }
