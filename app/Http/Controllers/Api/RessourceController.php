@@ -187,7 +187,7 @@ class RessourceController extends Controller
     {
         try {
             $validatedId = $this->defaultService->checkIdType($id);
-            $item = Ressource::where('deleted', 0)->with('getTypeRessource', 'getVisibilite', 'getCreateur', 'getLienRessourceRelation', 'getLienRessourceRelation.getRelationRessource', 'getLienRessourceCategorie', 'getLienRessourceCategorie.getCategorie', 'getLienRessourceCommentaire')->findOrFail($validatedId);
+            $item = Ressource::where('deleted', 0)->with('getTypeRessource', 'getVisibilite', 'getCreateur', 'getLienRessourceRelation', 'getLienRessourceRelation.getRelationRessource', 'getLienRessourceCategorie', 'getLienRessourceCategorie.getCategorie', 'getLienRessourceCommentaire', 'getLienRessourceCommentaire.getUtilisateur')->findOrFail($validatedId);
             return $this->handleService->handleSuccessShow($item);
         } catch (\Exception $e) {
             return $this->handleService->handleError($e);
