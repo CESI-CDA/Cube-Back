@@ -198,13 +198,13 @@
                 }
             }
         },
-        "/api/etat-commentaire": {
+        "/api/etat": {
             "get": {
                 "tags": [
-                    "EtatCommentaire"
+                    "Etat"
                 ],
-                "summary": "Récupérer tout les états des commentaires",
-                "operationId": "9d34986783ac1dbbc8989028409a74dc",
+                "summary": "Récupérer tout les états",
+                "operationId": "b461d4822609df70361d2e338e616127",
                 "parameters": [
                     {
                         "name": "per_page",
@@ -256,10 +256,10 @@
             },
             "post": {
                 "tags": [
-                    "EtatCommentaire"
+                    "Etat"
                 ],
-                "summary": "Créer un état de commentaire",
-                "operationId": "045c4d30bb56605fd71dff49d16c5f59",
+                "summary": "Créer un état",
+                "operationId": "06ab86a4502e8568eccc6c69771dfa41",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -292,13 +292,13 @@
                 }
             }
         },
-        "/api/etat-commentaire/{id}": {
+        "/api/etat/{id}": {
             "get": {
                 "tags": [
-                    "EtatCommentaire"
+                    "Etat"
                 ],
-                "summary": "Récupérer un état de commentaire spécifique",
-                "operationId": "2df442b2734391b3306f568f233241c1",
+                "summary": "Récupérer un état de spécifique",
+                "operationId": "84307af07b566795f40cc165339cf4f7",
                 "parameters": [
                     {
                         "name": "id",
@@ -318,10 +318,10 @@
             },
             "put": {
                 "tags": [
-                    "EtatCommentaire"
+                    "Etat"
                 ],
-                "summary": "Modifier un état de commentaire",
-                "operationId": "afb1b70f710ee34340a9ba686d8c6006",
+                "summary": "Modifier un état",
+                "operationId": "ba07b760a7fc31e11c977a851ac96008",
                 "parameters": [
                     {
                         "name": "id",
@@ -366,10 +366,10 @@
             },
             "delete": {
                 "tags": [
-                    "EtatCommentaire"
+                    "Etat"
                 ],
-                "summary": "Supprimer un état de commentaire",
-                "operationId": "c4e543a839c7460c20243697f7aebc93",
+                "summary": "Supprimer un état",
+                "operationId": "681c8c4958c3017f0b4d6d498382ce68",
                 "parameters": [
                     {
                         "name": "id",
@@ -1464,6 +1464,14 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "name": "keywordIdEtat",
+                        "in": "query",
+                        "description": "Keyword for searching items by keywordIdEtat (si null = 2 = validé)",
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -1738,6 +1746,55 @@
                 "responses": {
                     "200": {
                         "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/ressources/validate-ressource/{id}": {
+            "put": {
+                "tags": [
+                    "Ressource"
+                ],
+                "summary": "Modifier une ressource",
+                "operationId": "a415e05e0b603715895da8da90ca91f8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_etat"
+                                ],
+                                "properties": {
+                                    "id_etat": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Item updated successfully"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
                     },
                     "500": {
                         "description": "Internal server error"
@@ -2691,7 +2748,7 @@
             "name": "Categorie"
         },
         {
-            "name": "EtatCommentaire"
+            "name": "Etat"
         },
         {
             "name": "LienRessourceCommentaire"

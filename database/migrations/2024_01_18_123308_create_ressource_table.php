@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreignId('id_createur')->constrained('users');
             $table->dateTime('date_creation');
             $table->boolean('is_archive')->default(0);
+            $table->foreignId('id_etat')->constrained('etat');
             $table->timestamps();
             $table->boolean('deleted')->default(false);
         });

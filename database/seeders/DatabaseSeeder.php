@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TypeEtatSeeder::class);
         $this->call(TypeRessourceSeeder::class);
         $this->call(VisibiliteSeeder::class);
+        $this->call(EtatSeeder::class);
         $this->call(RessourceSeeder::class);
         $this->call(LienRessourceCategorieSeeder::class);
         $this->call(LienRessourceRelationSeeder::class);
@@ -26,7 +27,6 @@ class DatabaseSeeder extends Seeder
         $this->call(LienRessourceUserEtatSeeder::class);
         $this->call(LienRessourceUserFavorisSeeder::class);
         $this->call(LienUserRestrictionSeeder::class);
-        $this->call(EtatCommentaireSeeder::class);
         $this->call(LienRessourceCommentaireSeeder::class);
     }
 }

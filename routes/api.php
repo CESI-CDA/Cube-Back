@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CategorieController;
-use App\Http\Controllers\Api\EtatCommentaireController;
+use App\Http\Controllers\Api\EtatController;
 use App\Http\Controllers\Api\LienRessourceCommentaireController;
 use App\Http\Controllers\Api\LienRessourceUserArchiveController;
 use App\Http\Controllers\Api\LienRessourceUserFavorisController;
@@ -42,6 +42,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('liensRessourceUserArchive', LienRessourceUserArchiveController::class);
     Route::apiResource('liensRessourceCommentaire', LienRessourceCommentaireController::class);
     Route::put('/liensRessourceCommentaire/update-etat/{id}', [LienRessourceCommentaireController::class, 'updateEtat']);
+    Route::put('/ressources/validate-ressource/{id}', [RessourceController::class, 'validateRessource']);
 
     //---------------------------Users----------------------------//
     Route::apiResource('users', UserController::class);
@@ -69,10 +70,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('visibilites/{id}', [VisibiliteController::class, 'update'])->name('visibilites.update');
     Route::delete('visibilites/{id}', [VisibiliteController::class, 'destroy'])->name('visibilites.destroy');
 
-    Route::get('etat-commentaire/{id}', [EtatCommentaireController::class, 'show'])->name('etat-commentaire.show');
-    Route::post('etat-commentaire', [EtatCommentaireController::class, 'store'])->name('etat-commentaire.store');
-    Route::put('etat-commentaire/{id}', [EtatCommentaireController::class, 'update'])->name('etat-commentaire.update');
-    Route::delete('etat-commentaire/{id}', [EtatCommentaireController::class, 'destroy'])->name('etat-commentaire.destroy');
+    Route::get('etat/{id}', [EtatController::class, 'show'])->name('etat.show');
+    Route::post('etat', [EtatController::class, 'store'])->name('etat.store');
+    Route::put('etat/{id}', [EtatController::class, 'update'])->name('etat.update');
+    Route::delete('etat/{id}', [EtatController::class, 'destroy'])->name('etat.destroy');
 });
 
 Route::apiResource('ressources', RessourceController::class);
@@ -81,4 +82,4 @@ Route::get('categories', [CategorieController::class, 'index'])->name('categorie
 Route::get('relations', [RelationController::class, 'index'])->name('relations.index');
 Route::get('typesRessource', [TypeRessourceController::class, 'index'])->name('typesRessource.index');
 Route::get('visibilites', [VisibiliteController::class, 'index'])->name('visibilites.index');
-Route::get('etat-commentaire', [EtatCommentaireController::class, 'index'])->name('etat-commentaire.index');
+Route::get('etat', [EtatController::class, 'index'])->name('etat.index');

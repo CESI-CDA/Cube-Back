@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\EtatCommentaire;
 use App\Models\LienUserRestriction;
 use App\Services\TruncateTableService;
 use Illuminate\Database\Seeder;

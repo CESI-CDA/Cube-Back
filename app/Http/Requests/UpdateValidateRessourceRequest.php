@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateEtatCommentaireRequest extends FormRequest
+class UpdateValidateRessourceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class UpdateEtatCommentaireRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'intitule' => 'required|string|max:50'
+            'id_etat' => 'required|integer|exists:etat,id'
         ];
     }
 }

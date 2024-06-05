@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\EtatCommentaire;
+use App\Models\Etat;
 use App\Services\TruncateTableService;
 use Illuminate\Database\Seeder;
 
-class EtatCommentaireSeeder extends Seeder
+class EtatSeeder extends Seeder
 {
     /**
      * The TruncateTableService instance.
@@ -30,17 +30,17 @@ class EtatCommentaireSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->truncateTableService->truncateTable('etat_commentaire');
-        $etatCommentaireData = [
+        $this->truncateTableService->truncateTable('etat');
+        $etatData = [
             ['id' => 1, 'intitule' => 'En attente'],
             ['id' => 2, 'intitule' => 'Validé'],
             ['id' => 3, 'intitule' => 'Refusé']
         ];
 
-        foreach ($etatCommentaireData as $etatCommentaire) {
-            EtatCommentaire::create([
-                'id' => $etatCommentaire['id'],
-                'intitule' => $etatCommentaire['intitule']
+        foreach ($etatData as $etat) {
+            Etat::create([
+                'id' => $etat['id'],
+                'intitule' => $etat['intitule']
             ]);
         }
     }
