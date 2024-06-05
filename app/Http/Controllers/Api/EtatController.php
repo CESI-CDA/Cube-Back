@@ -3,18 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreEtatCommentaireRequest;
+use App\Http\Requests\StoreEtatRequest;
 use App\Http\Requests\TypageIndexRequest;
-use App\Http\Requests\UpdateEtatCommentaireRequest;
-use App\Models\EtatCommentaire;
+use App\Http\Requests\UpdateEtatRequest;
+use App\Models\Etat;
 use App\Services\DefaultService;
 use App\Services\HandleService;
 use Illuminate\Http\Request;
 
 /**
- * @OA\Tag(name="EtatCommentaire")
+ * @OA\Tag(name="Etat")
  */
-class EtatCommentaireController extends Controller
+class EtatController extends Controller
 {
     public function __construct(
         protected DefaultService $defaultService,
@@ -24,9 +24,9 @@ class EtatCommentaireController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/etat-commentaire",
-     *     summary="Récupérer tout les états des commentaires",
-     *     tags={"EtatCommentaire"},
+     *     path="/api/etat",
+     *     summary="Récupérer tout les états",
+     *     tags={"Etat"},
      *     @OA\Parameter(
      *         name="per_page",
      *         in="query",
@@ -59,7 +59,7 @@ class EtatCommentaireController extends Controller
     public function index(TypageIndexRequest $typageIndexRequest)
     {
         try {
-            $queryModel = EtatCommentaire::query()->where('deleted', 0);
+            $queryModel = Etat::query()->where('deleted', 0);
             $items = $this->defaultService->dataIndexBasique($typageIndexRequest, $queryModel, ['intitule'], []);
             return $this->handleService->handleSuccessIndex($items);
         } catch (\Exception $e) {
@@ -70,9 +70,9 @@ class EtatCommentaireController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/etat-commentaire/{id}",
-     *     summary="Récupérer un état de commentaire spécifique",
-     *     tags={"EtatCommentaire"},
+     *     path="/api/etat/{id}",
+     *     summary="Récupérer un état de spécifique",
+     *     tags={"Etat"},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID of the item"),
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=404, description="Item not found"),
@@ -83,7 +83,7 @@ class EtatCommentaireController extends Controller
     {
         try {
             $validatedId = $this->defaultService->checkIdType($id);
-            $item = EtatCommentaire::where('deleted', 0)->findOrFail($validatedId);
+            $item = Etat::where('deleted', 0)->findOrFail($validatedId);
             return $this->handleService->handleSuccessShow($item);
         } catch (\Exception $e) {
             return $this->handleService->handleError($e);
@@ -92,9 +92,9 @@ class EtatCommentaireController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/etat-commentaire",
-     *     summary="Créer un état de commentaire",
-     *     tags={"EtatCommentaire"},
+     *     path="/api/etat",
+     *     summary="Créer un état",
+     *     tags={"Etat"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -107,11 +107,11 @@ class EtatCommentaireController extends Controller
      *     @OA\Response(response=500, description="Internal server error"),
      *     * )
      */
-    public function store(StoreEtatCommentaireRequest $storeEtatCommentaireRequest)
+    public function store(StoreEtatRequest $storeEtatRequest)
     {
         try {
-            $validatedData = $storeEtatCommentaireRequest->validated();
-            $item = EtatCommentaire::create($validatedData);
+            $validatedData = $storeEtatRequest->validated();
+            $item = Etat::create($validatedData);
             return $this->handleService->handleSuccessStore($item);
         } catch (\Illuminate\Database\QueryException $e) {
             return $this->handleService->handleErrorStore($e);
@@ -122,9 +122,9 @@ class EtatCommentaireController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/etat-commentaire/{id}",
-     *     summary="Modifier un état de commentaire",
-     *     tags={"EtatCommentaire"},
+     *     path="/api/etat/{id}",
+     *     summary="Modifier un état",
+     *     tags={"Etat"},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID of the item"),
      *     @OA\RequestBody(
      *         required=true,
@@ -140,12 +140,12 @@ class EtatCommentaireController extends Controller
      *     * )
      */
 
-    public function update(UpdateEtatCommentaireRequest $updateEtatCommentaireRequest, $id)
+    public function update(UpdateEtatRequest $updateEtatRequest, $id)
     {
         try {
             $validatedId = $this->defaultService->checkIdType($id);
-            $validatedData = $updateEtatCommentaireRequest->validated();
-            $item = EtatCommentaire::where('deleted', 0)->findOrFail($validatedId);
+            $validatedData = $updateEtatRequest->validated();
+            $item = Etat::where('deleted', 0)->findOrFail($validatedId);
             $item->update($validatedData);
             return $this->handleService->handleSuccessUpdate($item);
         } catch (\Illuminate\Database\QueryException $e) {
@@ -157,9 +157,9 @@ class EtatCommentaireController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/etat-commentaire/{id}",
-     *     summary="Supprimer un état de commentaire",
-     *     tags={"EtatCommentaire"},
+     *     path="/api/etat/{id}",
+     *     summary="Supprimer un état",
+     *     tags={"Etat"},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID of the item"),
      *     @OA\Response(response=200, description="Item deleted successfully"),
      *     @OA\Response(response=404, description="Item not found"),
@@ -171,7 +171,7 @@ class EtatCommentaireController extends Controller
     {
         try {
             $validatedId = $this->defaultService->checkIdType($id);
-            EtatCommentaire::where('deleted', 0)->findOrFail($validatedId)->update(['deleted' => true]);
+            Etat::where('deleted', 0)->findOrFail($validatedId)->update(['deleted' => true]);
             return $this->handleService->handleSuccessDestroy();
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return $this->handleService->handleErrorDestroy($e);

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateEtatLienRessourceCommentaireRequest extends FormRequest
+class UpdateEtatRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class UpdateEtatLienRessourceCommentaireRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id_etat' => 'required|integer|exists:etat,id'
+            'intitule' => 'required|string|max:50'
         ];
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRessourceRequest;
 use App\Http\Requests\TypageIndexRequest;
 use App\Http\Requests\UpdateRessourceRequest;
+use App\Http\Requests\UpdateValidateRessourceRequest;
 use App\Models\LienRessourceCategorie;
 use App\Models\LienRessourceRelation;
 use App\Models\Ressource;
@@ -83,6 +84,12 @@ class RessourceController extends Controller
      *         description="Keyword for searching items by keywordIdCreateur",
      *         @OA\Schema(type="integer")
      *     ),
+     *     @OA\Parameter(
+     *         name="keywordIdEtat",
+     *         in="query",
+     *         description="Keyword for searching items by keywordIdEtat (si null = 2 = validé)",
+     *         @OA\Schema(type="integer")
+     *     ),
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=500, description="Internal server error"),
      * )
@@ -103,6 +110,7 @@ class RessourceController extends Controller
                 'keywordDateDebutCreation' => 'nullable|date',
                 'keywordDateFinCreation' => 'nullable|date',
                 'keywordIsArchive' => 'nullable|boolean',
+                'keywordIdEtat' => 'nullable|integer|exists:etat,id',
             ]);
 
             $query = Ressource::query()->where('deleted', false);
@@ -152,6 +160,10 @@ class RessourceController extends Controller
                 $query->where('ressource.is_archive', $keywordIsArchive);
             }
 
+            $keywordIdEtat = $request->input('keywordIdEtat');
+            $keywordIdEtat = $keywordIdEtat ?? 2;
+            $query->where('ressource.id_etat', $keywordIdEtat);
+
             $sortColumn = $request->input('sort_by', 'date_creation');
             $sortOrder = $request->input('sort_order', 'desc');
             $query->orderBy($sortColumn, $sortOrder);
@@ -187,7 +199,7 @@ class RessourceController extends Controller
     {
         try {
             $validatedId = $this->defaultService->checkIdType($id);
-            $item = Ressource::where('deleted', 0)->with('getTypeRessource', 'getVisibilite', 'getCreateur', 'getLienRessourceRelation', 'getLienRessourceRelation.getRelationRessource', 'getLienRessourceCategorie', 'getLienRessourceCategorie.getCategorie', 'getLienRessourceCommentaire', 'getLienRessourceCommentaire.getUtilisateur')->findOrFail($validatedId);
+            $item = Ressource::where('deleted', 0)->with('getTypeRessource', 'getVisibilite', 'getCreateur', 'getEtat', 'getLienRessourceRelation', 'getLienRessourceRelation.getRelationRessource', 'getLienRessourceCategorie', 'getLienRessourceCategorie.getCategorie', 'getLienRessourceCommentaire', 'getLienRessourceCommentaire.getUtilisateur')->findOrFail($validatedId);
             return $this->handleService->handleSuccessShow($item);
         } catch (\Exception $e) {
             return $this->handleService->handleError($e);
@@ -231,7 +243,8 @@ class RessourceController extends Controller
                 'id_vis' => $validatedData['id_vis'],
                 'id_createur' => $validatedData['id_createur'],
                 'date_creation' => (new DateTime())->format('Y-m-d H:i:s'),
-                'is_archive' => 0
+                'is_archive' => 0,
+                'id_etat' => 1
             ]);
 
             foreach ($validatedData['arrayIdCat'] as $categorie) {
@@ -431,8 +444,46 @@ class RessourceController extends Controller
     {
         try {
             $queryModel = Ressource::query()->where('deleted', 0)->where('id_createur', $id_user);
-            $items = $this->defaultService->dataIndexBasique($typageIndexRequest, $queryModel, ['titre_res'], ['getTypeRessource', 'getVisibilite', 'getCreateur', 'getLienRessourceRelation', 'getLienRessourceRelation.getRelationRessource', 'getLienRessourceCategorie', 'getLienRessourceCategorie.getCategorie']);
+            $items = $this->defaultService->dataIndexBasique($typageIndexRequest, $queryModel, ['titre_res'], ['getTypeRessource', 'getVisibilite', 'getCreateur', 'getEtat', 'getLienRessourceRelation', 'getLienRessourceRelation.getRelationRessource', 'getLienRessourceCategorie', 'getLienRessourceCategorie.getCategorie']);
             return $this->handleService->handleSuccessIndex($items);
+        } catch (\Exception $e) {
+            return $this->handleService->handleError($e);
+        }
+    }
+
+
+    /**
+     * @OA\Put(
+     *     path="/api/ressources/validate-ressource/{id}",
+     *     summary="Modifier une ressource",
+     *     tags={"Ressource"},
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID of the item"),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"id_etat"},
+     *             @OA\Property(property="id_etat",  type="integer"),
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Item updated successfully"),
+     *     @OA\Response(response=404, description="Item not found"),
+     *     @OA\Response(response=422, description="Validation error"),
+     *     @OA\Response(response=500, description="Internal server error"),
+     *     * )
+     */
+
+    public function validateRessource(UpdateValidateRessourceRequest $updateValidateRessourceRequest, $id)
+    {
+        try {
+            $validatedId = $this->defaultService->checkIdType($id);
+            $validatedData = $updateValidateRessourceRequest->validated();
+
+            $item = Ressource::where('deleted', false)->findOrFail($validatedId);
+            $item->update($validatedData);
+
+            return $this->handleService->handleSuccessUpdate($item);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return $this->handleService->handleErrorUpdate($e);
         } catch (\Exception $e) {
             return $this->handleService->handleError($e);
         }
