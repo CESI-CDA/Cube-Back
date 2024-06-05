@@ -59,7 +59,7 @@ class LienRessourceCommentaireController extends Controller
     {
         try {
             $queryModel = LienRessourceCommentaire::query()->where('deleted', 0)->where('id_etat', 1);
-            $items = $this->defaultService->dataIndexBasique($typageIndexRequest, $queryModel, ['date', 'commentaire'], []);
+            $items = $this->defaultService->dataIndexBasique($typageIndexRequest, $queryModel, ['date', 'commentaire'], ['getUtilisateur']);
             return $this->handleService->handleSuccessIndex($items);
         } catch (\Exception $e) {
             return $this->handleService->handleError($e);
@@ -80,7 +80,7 @@ class LienRessourceCommentaireController extends Controller
     {
         try {
             $validatedId = $this->defaultService->checkIdType($id);
-            $item = LienRessourceCommentaire::where('deleted', 0)->findOrFail($validatedId);
+            $item = LienRessourceCommentaire::where('deleted', 0)->with('getUtilisateur')->findOrFail($validatedId);
             return $this->handleService->handleSuccessShow($item);
         } catch (\Exception $e) {
             return $this->handleService->handleError($e);
