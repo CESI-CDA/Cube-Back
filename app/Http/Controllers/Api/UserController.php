@@ -13,6 +13,7 @@ use App\Models\LienRessourceUserFavoris;
 use App\Models\User;
 use App\Services\DefaultService;
 use App\Services\HandleService;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -23,7 +24,8 @@ class UserController extends Controller
 {
     public function __construct(
         protected DefaultService $defaultService,
-        protected HandleService $handleService
+        protected HandleService $handleService,
+        protected UserService $userService
     ) {
     }
 
@@ -65,7 +67,10 @@ class UserController extends Controller
     {
         try {
             $queryModel = User::query()->where('deleted', 0);
-            $items = $this->defaultService->dataIndexBasique($typageIndexRequest, $queryModel, ['nom', 'prenom', 'pseudonyme', 'email', 'id_rol'], []);
+            $items = $this->defaultService->dataIndexBasique($typageIndexRequest, $queryModel, ['nom', 'prenom', 'pseudonyme', 'email', 'id_rol'], ['getLienUserRestriction']);
+            foreach ($items as $item) {
+                $item->is_restricted = $this->userService->isActiveRestriction($item->id);
+            }
             return $this->handleService->handleSuccessIndex($items);
         } catch (\Exception $e) {
             return $this->handleService->handleError($e);
@@ -134,7 +139,7 @@ class UserController extends Controller
             ]);
             $infos = [
                 'password' => $randomPassword,
-                'url' => env('FRONTEND_URL').'/login'
+                'url' => env('FRONTEND_URL') . '/login'
             ];
             Mail::to($item->email)->send(new WelcomeUserMail($infos));
             return $this->handleService->handleSuccessStore($item);
