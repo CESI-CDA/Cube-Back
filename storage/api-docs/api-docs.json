@@ -1802,6 +1802,33 @@
                 }
             }
         },
+        "/api/statistiques": {
+            "get": {
+                "tags": [
+                    "Statistique"
+                ],
+                "summary": "Get all items",
+                "operationId": "4f79bed1c7178aafc3e18594ad3e7c8b",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "Keyword for searching items by date (12months or 6months or 7days)",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
         "/api/typesRessource": {
             "get": {
                 "tags": [
@@ -2767,6 +2794,9 @@
         },
         {
             "name": "Ressource"
+        },
+        {
+            "name": "Statistique"
         },
         {
             "name": "TypeRessource"
