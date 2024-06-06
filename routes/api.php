@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\LienRessourceUserFavorisController;
 use App\Http\Controllers\Api\LienUserRestrictionController;
 use App\Http\Controllers\Api\RelationController;
 use App\Http\Controllers\Api\RessourceController;
+use App\Http\Controllers\Api\StatistiqueController;
 use App\Http\Controllers\Api\TypeRessourceController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\VisibiliteController;
@@ -74,6 +75,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('etat', [EtatController::class, 'store'])->name('etat.store');
     Route::put('etat/{id}', [EtatController::class, 'update'])->name('etat.update');
     Route::delete('etat/{id}', [EtatController::class, 'destroy'])->name('etat.destroy');
+
+    Route::get('statistiques', [StatistiqueController::class, 'index'])->name('statistiques.index');
 });
 
 Route::apiResource('ressources', RessourceController::class);
