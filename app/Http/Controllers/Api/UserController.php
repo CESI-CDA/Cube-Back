@@ -24,8 +24,7 @@ class UserController extends Controller
 {
     public function __construct(
         protected DefaultService $defaultService,
-        protected HandleService $handleService,
-        protected UserService $userService
+        protected HandleService $handleService
     ) {
     }
 
@@ -68,9 +67,6 @@ class UserController extends Controller
         try {
             $queryModel = User::query()->where('deleted', 0);
             $items = $this->defaultService->dataIndexBasique($typageIndexRequest, $queryModel, ['nom', 'prenom', 'pseudonyme', 'email', 'id_rol'], ['getLienUserRestriction']);
-            foreach ($items as $item) {
-                $item->is_restricted = $this->userService->isActiveRestriction($item->id);
-            }
             return $this->handleService->handleSuccessIndex($items);
         } catch (\Exception $e) {
             return $this->handleService->handleError($e);

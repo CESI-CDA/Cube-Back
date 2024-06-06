@@ -54,6 +54,6 @@ class User extends Authenticatable
 
     public function getLienUserRestriction(): BelongsTo
     {
-        return $this->belongsTo(LienUserRestriction::class, 'id', 'id_user')->where('deleted', false)->where('date', '>', Carbon::now())->latest('date')->limit(1)->select(['id', 'id_user', 'date', 'commentaire']);
+        return $this->belongsTo(LienUserRestriction::class, 'id', 'id_user')->where('deleted', false)->where('date', '>', Carbon::now())->latest('date')->select(['id', 'id_user', 'date', 'commentaire']);
     }
 }
