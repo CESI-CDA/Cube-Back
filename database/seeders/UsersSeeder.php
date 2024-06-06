@@ -37,7 +37,13 @@ class UsersSeeder extends Seeder
             ['id' => 2, 'nom' => 'Faucon', 'prenom' => 'Nathan', 'pseudonyme' => 'FauconNathan', 'email' => 'nathan.faucon@viacesi.fr', 'password' => 'Noisyfox59000!', 'id_rol' => 1],
             ['id' => 3, 'nom' => 'Vasseur', 'prenom' => 'Helene', 'pseudonyme' => 'HeleneVasseur', 'email' => 'helene.vasseur@viacesi.fr', 'password' => 'LnVsr59000!', 'id_rol' => 1],
             ['id' => 4, 'nom' => 'Forestier', 'prenom' => 'Julien', 'pseudonyme' => 'JulienForestier', 'email' => 'julien.forestier@viacesi.fr', 'password' => 'Bad0ck59000!', 'id_rol' => 1],
-            ['id' => 5, 'nom' => 'Dervaux', 'prenom' => 'Maxime', 'pseudonyme' => 'MaximeDervaux', 'email' => 'maxime.dervaux@viacesi.fr', 'password' => 'Proxyme59000!', 'id_rol' => 1]
+            ['id' => 5, 'nom' => 'Dervaux', 'prenom' => 'Maxime', 'pseudonyme' => 'MaximeDervaux', 'email' => 'maxime.dervaux@viacesi.fr', 'password' => 'Proxyme59000!', 'id_rol' => 1],
+            ['id' => 6, 'nom' => 'Dupont', 'prenom' => 'Michel', 'pseudonyme' => 'MichelDupont', 'email' => 'michel.dupont@projet-ressources.fr', 'password' => 'MichDup59000!', 'id_rol' => 2],
+            ['id' => 7, 'nom' => 'Lefevre', 'prenom' => 'Alain', 'pseudonyme' => 'AlainLefevre', 'email' => 'alain.lefevre@projet-ressources.fr', 'password' => 'AlainLef59000!', 'id_rol' => 2],
+            ['id' => 8, 'nom' => 'Smith', 'prenom' => 'Benjamin', 'pseudonyme' => 'SmithBenjamin', 'email' => 'smith.benjamin@projet-ressources.fr', 'password' => 'BenjSmith59000!', 'id_rol' => 3],
+            ['id' => 9, 'nom' => 'Flordelis', 'prenom' => 'Ferland', 'pseudonyme' => 'FerlandFlordelis', 'email' => 'ferland.flordelis@projet-ressources.fr', 'password' => 'FerlandFlor59000!', 'id_rol' => 3],        
+            ['id' => 10, 'nom' => 'Soriol', 'prenom' => 'Gabriel', 'pseudonyme' => 'SoriolGabriel', 'email' => 'soriol.gabriel@projet-ressources.fr', 'password' => 'GabSor59000!', 'id_rol' => 4],
+            ['id' => 11, 'nom' => 'Dumoulin', 'prenom' => 'Jean', 'pseudonyme' => 'JeanDumoulin', 'email' => 'jean.dumoulin@projet-ressources.fr', 'password' => 'JeanDumou59000!', 'id_rol' => 4],
         ];
 
         foreach ($userData as $user) {

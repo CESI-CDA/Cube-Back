@@ -32,7 +32,10 @@ class LienUserRestrictionSeeder extends Seeder
     {
         $this->truncateTableService->truncateTable('lien_user_restriction');
         $lienUserRestrictionData = [
-            ['id' => 1, 'id_user' => 1, 'date' => '2025-01-01 15:22:36', 'commentaire' => 'Propos vulgaire']
+            ['id' => 1, 'id_user' => 10, 'date' => '2025-01-01 15:22:36', 'commentaire' => 'Propos vulgaire'],
+            ['id' => 2, 'id_user' => 9, 'date' => '2024-08-08 15:22:36', 'commentaire' => 'Spam'],
+            ['id' => 3, 'id_user' => 8, 'date' => '2024-07-07 15:22:36', 'commentaire' => 'Image désaproprié'],
+
         ];
 
         foreach ($lienUserRestrictionData as $lienUserRestriction) {
