@@ -17,8 +17,10 @@ jobs:
     - name: Install depedencies
       uses: php-actions/composer@v6
 
-    # - name: Run tests
-    #   run: ./vendor/bin/phpunit
+    - name: Run tests
+      with:
+        php_version: "8.2.12"
+      run: ./vendor/bin/phpunit
         
     # # Étape 5 : Transférer les fichiers vers le serveur via SSH (avec mot de passe)
     # - name: Copy files via SSH
