@@ -27,5 +27,9 @@ jobs:
       - name: Run migrations before tests
         run: php artisan migrate --env=testing
 
+      - name: Seed the database
+        run: php artisan db:seed --env=testing
+
       - name: Run PHPUnit tests
         run: ./vendor/bin/phpunit
+
