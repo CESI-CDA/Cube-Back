@@ -14,10 +14,8 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Install depedencies
-      uses: php-actions/composer@v6
-      with:
-        php_version: "8.2.12"
+    - name: Run composer install
+      run: composer install
 
     - name: Run tests
       run: ./vendor/bin/phpunit
