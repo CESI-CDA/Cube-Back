@@ -3,7 +3,7 @@ name: Laravel API CI
 on:
   push:
     branches:
-      - develop
+      - TestAndProtectedRoutes
 
 jobs:
   laravel-tests:
