@@ -10,11 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Étape 1 : Vérification du code
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Étape 2 : Installation de PHP et des dépendances
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -23,23 +21,14 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
-      # Étape 3 : Générer le fichier .env pour les tests
-      - name: Setup environment file
-        run: cp .env.example .env
-
-      # Étape 4 : Générer la clé d'application
-      # - name: Generate Laravel application key
-      #   run: php artisan key:generate
-
-      # Étape 5 : Lancer les migrations pour préparer la base de données SQLite
-      - name: Run migrations
-        run: php artisan migrate --env=testing
-
-      - name: Check if users table exists
+      - name: Setup environment file for testing
         run: |
-          sqlite3 :memory: ".tables"
+          cp .env.example .env
+          echo "DB_CONNECTION=sqlite" >> .env
+          echo "DB_DATABASE=:memory:" >> .env
 
+      - name: Run migrations
+        run: php artisan migrate
 
-      # Étape 6 : Lancer les tests PHPUnit
       - name: Run PHPUnit tests
         run: ./vendor/bin/phpunit
