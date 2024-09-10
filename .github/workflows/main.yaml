@@ -22,21 +22,15 @@ jobs:
         run: composer install --prefer-dist --no-progress --no-suggest
 
       - name: Setup environment file for testing
-        run: cp .env.example .env
-      
-      - name: Clear config cache
-        run: php artisan config:clear
-
-      - name: Clear route cache
-        run: php artisan route:clear
+        run: cp .env.testing .env
 
       - name: Run migrations before tests
         run: |
-          php artisan migrate --env=testing
-          php artisan migrate:status --env=testing
+          php artisan migrate
+          php artisan migrate:status
 
       - name: Seed the database
-        run: php artisan db:seed --env=testing
+        run: php artisan db:seed
 
       - name: Run PHPUnit tests
         run: ./vendor/bin/phpunit
