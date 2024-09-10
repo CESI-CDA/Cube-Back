@@ -33,11 +33,12 @@ jobs:
 
       # Étape 5 : Lancer les migrations pour préparer la base de données SQLite
       - name: Run migrations
-        run: php artisan migrate --env=testing --no-interaction -vvv
+        run: php artisan migrate --env=testing
 
       - name: Check if users table exists
         run: |
           sqlite3 :memory: ".tables"
+
 
       # Étape 6 : Lancer les tests PHPUnit
       - name: Run PHPUnit tests
