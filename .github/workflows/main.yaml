@@ -1,0 +1,41 @@
+name: Deploy Back-end App
+
+on:
+  push:
+    branches:
+      - TestAndProtectedRoutes
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: Raspberry
+
+    steps:
+    # Étape 1 : Checkout du code source
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    # Étape 2 : Configuration de Node.js
+    - name: Install depedencies
+      uses: php-actions/composer@v6
+      with:
+        command: composer install
+        
+    # # Étape 5 : Transférer les fichiers vers le serveur via SSH (avec mot de passe)
+    # - name: Copy files via SSH
+    #   uses: appleboy/scp-action@v0.1.3
+    #   with:
+    #     host: ${{ secrets.SSH_HOST }}
+    #     username: ${{ secrets.SSH_USER }}
+    #     password: ${{ secrets.SSH_PASSWORD }}
+    #     source: 'dist/*'
+    #     target: '/var/www/html/Cube-Front'
+
+    # # Étape 6 : Redémarrer le serveur Apache (si nécessaire)
+    # - name: Restart Apache server
+    #   uses: appleboy/ssh-action@v0.1.5
+    #   with:
+    #     host: ${{ secrets.SSH_HOST }}
+    #     username: ${{ secrets.SSH_USER }}
+    #     password: ${{ secrets.SSH_PASSWORD }}
+    #     script: sudo systemctl restart apache2
