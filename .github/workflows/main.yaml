@@ -1,24 +1,32 @@
-name: Deploy Back-end App
+name: Laravel API CI
 
 on:
   push:
     branches:
-      - TestAndProtectedRoutes
+      - develop
 
 jobs:
-  build:
+  laravel-tests:
     runs-on: ubuntu-latest
-    environment: Raspberry
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      # Étape 1 : Vérification du code
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Run composer install
-      run: composer update
+      # Étape 2 : Installation de PHP et des dépendances
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2.12'
 
-    - name: Run tests
-      run: ./vendor/bin/phpunit
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      # Étape 6 : Lancer les tests PHPUnit
+      - name: Run PHPUnit tests
+        run: ./vendor/bin/phpunit
+
         
     # # Étape 5 : Transférer les fichiers vers le serveur via SSH (avec mot de passe)
     # - name: Copy files via SSH
