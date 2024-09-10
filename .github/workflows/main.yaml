@@ -24,13 +24,17 @@ jobs:
       - name: Setup environment file for testing
         run: cp .env.testing .env
 
-      - name: Check environment file
-        run: cat .env
+      - name: Create SQLite database file
+        run: touch /tmp/database.sqlite
 
       - name: Run migrations before tests
         run: |
           php artisan migrate --env=testing
           php artisan migrate:status --env=testing
+
+      - name: List SQLite tables
+        run: |
+          sqlite3 /tmp/database.sqlite ".tables"
 
       - name: Seed the database
         run: php artisan db:seed --env=testing
