@@ -23,6 +23,12 @@ jobs:
 
       - name: Setup environment file for testing
         run: cp .env.example .env
+      
+      - name: Clear config cache
+        run: php artisan config:clear
+
+      - name: Clear route cache
+        run: php artisan route:clear
 
       - name: Run migrations before tests
         run: |
