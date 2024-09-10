@@ -25,11 +25,12 @@ jobs:
         run: cp .env.example .env
 
       - name: Run migrations before tests
-        run: php artisan migrate --env=testing
+        run: |
+          php artisan migrate --env=testing
+          php artisan migrate:status --env=testing
 
       - name: Seed the database
         run: php artisan db:seed --env=testing
 
       - name: Run PHPUnit tests
         run: ./vendor/bin/phpunit
-
