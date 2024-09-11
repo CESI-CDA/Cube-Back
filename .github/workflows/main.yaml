@@ -3,16 +3,20 @@ name: Laravel API CI
 on:
   push:
     branches:
-      - TestAndProtectedRoutes
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   laravel-tests:
     runs-on: ubuntu-latest
     environment: Test back-end
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -27,17 +31,7 @@ jobs:
           echo "APP_NAME=${{ secrets.APP_NAME }}" >> .env
           echo "APP_ENV=${{ secrets.APP_ENV }}" >> .env
           echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
-          echo "APP_DEBUG=${{ secrets.APP_DEBUG }}" >> .env
-          echo "APP_URL=${{ secrets.APP_URL }}" >> .env
-          echo "DB_CONNECTION=${{ secrets.DB_CONNECTION }}" >> .env
-          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
-          echo "DB_FOREIGN_KEYS=${{ secrets.DB_FOREIGN_KEYS }}" >> .env
-          echo "CACHE_DRIVER=${{ secrets.CACHE_DRIVER }}" >> .env
-          echo "SESSION_DRIVER=${{ secrets.SESSION_DRIVER }}" >> .env
-          echo "QUEUE_CONNECTION=${{ secrets.QUEUE_CONNECTION }}" >> .env
-          echo "MAIL_MAILER=${{ secrets.MAIL_MAILER }}" >> .env
-          echo "BROADCAST_DRIVER=${{ secrets.BROADCAST_DRIVER }}" >> .env
-          echo "FILESYSTEM_DRIVER=${{ secrets.FILESYSTEM_DRIVER }}" >> .env
+          # Ajoute les autres variables ici
 
       - name: Create SQLite database file
         run: touch /tmp/database.sqlite
@@ -53,55 +47,54 @@ jobs:
 
   run-sonar:
     runs-on: ubuntu-latest
-    environment: Raspberry
     needs: laravel-tests
+    environment: Raspberry
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  # merge-develop-main:
-  #   runs-on: ubuntu-latest
-  #   environment: Raspberry
-  #   needs: laravel-tests
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v2
+  merge-develop-main:
+    runs-on: ubuntu-latest
+    environment: Raspberry
+    needs: [laravel-tests, run-sonar]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-  #     # Étape 1 : Transférer les fichiers vers le serveur via SSH (si nécessaire)
-  #     - name: Copy repository to server
-  #       uses: appleboy/scp-action@v0.1.3
-  #       with:
-  #         host: ${{ secrets.SSH_HOST }}
-  #         username: ${{ secrets.SSH_USER }}
-  #         password: ${{ secrets.SSH_PASSWORD }}
-  #         source: "." # Transférer tous les fichiers ou un sous-ensemble
-  #         target: "/var/www/html/Cube-Back" # Remplace par le chemin cible sur ton serveur
+      - name: Copy repository to server
+        uses: appleboy/scp-action@v0.1.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: "."
+          target: "/var/www/html/Cube-Back"
 
-  #     # Étape 2 : Fusionner la branche develop sur main via SSH
-  #     - name: Merge Develop into Main on Remote Server
-  #       uses: appleboy/ssh-action@v0.1.5
-  #       with:
-  #         host: ${{ secrets.SSH_HOST }}
-  #         username: ${{ secrets.SSH_USER }}
-  #         password: ${{ secrets.SSH_PASSWORD }}
-  #         script: |
-  #           cd /var/www/html/Cube-Back
-  #           git checkout main
-  #           git pull origin main
-  #           git merge develop
-  #           git push origin main
+      - name: Merge Develop into Main on Remote Server
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd /var/www/html/Cube-Back
+            git checkout main
+            git pull origin main
+            git merge develop
+            git push origin main
 
-  #     # Étape 3 : Redémarrer le serveur Apache (si nécessaire)
-  #     - name: Restart Apache server
-  #       uses: appleboy/ssh-action@v0.1.5
-  #       with:
-  #         host: ${{ secrets.SSH_HOST }}
-  #         username: ${{ secrets.SSH_USER }}
-  #         password: ${{ secrets.SSH_PASSWORD }}
-  #         script: sudo systemctl restart apache2
+      - name: Restart Apache server
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: sudo systemctl restart apache2
