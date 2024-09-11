@@ -9,45 +9,54 @@ on:
       - main
 
 jobs:
-  # laravel-tests:
-  #   runs-on: ubuntu-latest
-  #   environment: Test back-end
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
+  laravel-tests:
+    runs-on: ubuntu-latest
+    environment: Test back-end
 
-  #     - name: Setup PHP
-  #       uses: shivammathur/setup-php@v2
-  #       with:
-  #         php-version: "8.2"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-  #     - name: Install Composer dependencies
-  #       run: composer install --prefer-dist --no-progress --no-suggest
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
 
-  #     - name: Setup environment variables
-  #       run: |
-  #         echo "APP_NAME=${{ secrets.APP_NAME }}" >> .env
-  #         echo "APP_ENV=${{ secrets.APP_ENV }}" >> .env
-  #         echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
-  #         # Ajoute les autres variables ici
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
 
-  #     - name: Create SQLite database file
-  #       run: touch /tmp/database.sqlite
+      - name: Setup environment variables
+        run: |
+          echo "APP_NAME=${{ secrets.APP_NAME }}" >> .env
+          echo "APP_ENV=${{ secrets.APP_ENV }}" >> .env
+          echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
+          echo "APP_DEBUG=${{ secrets.APP_DEBUG }}" >> .env
+          echo "APP_URL=${{ secrets.APP_URL }}" >> .env
+          echo "DB_CONNECTION=${{ secrets.DB_CONNECTION }}" >> .env
+          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+          echo "DB_FOREIGN_KEYS=${{ secrets.DB_FOREIGN_KEYS }}" >> .env
+          echo "CACHE_DRIVER=${{ secrets.CACHE_DRIVER }}" >> .env
+          echo "SESSION_DRIVER=${{ secrets.SESSION_DRIVER }}" >> .env
+          echo "QUEUE_CONNECTION=${{ secrets.QUEUE_CONNECTION }}" >> .env
+          echo "MAIL_MAILER=${{ secrets.MAIL_MAILER }}" >> .env
+          echo "BROADCAST_DRIVER=${{ secrets.BROADCAST_DRIVER }}" >> .env
+          echo "FILESYSTEM_DRIVER=${{ secrets.FILESYSTEM_DRIVER }}" >> .env
 
-  #     - name: Run migrations before tests
-  #       run: php artisan migrate
+      - name: Create SQLite database file
+        run: touch /tmp/database.sqlite
 
-  #     - name: Seed the database
-  #       run: php artisan db:seed
+      - name: Run migrations before tests
+        run: php artisan migrate
 
-  #     - name: Run PHPUnit tests
-  #       run: php artisan test
+      - name: Seed the database
+        run: php artisan db:seed
+
+      - name: Run PHPUnit tests
+        run: php artisan test
 
   run-sonar:
     runs-on: ubuntu-latest
-    # needs: laravel-tests
+    needs: laravel-tests
     environment: Raspberry
     steps:
       - name: Checkout repository
@@ -64,7 +73,7 @@ jobs:
   pull-on-server:
     runs-on: ubuntu-latest
     environment: Raspberry
-    needs: [run-sonar]
+    needs: [laravel-tests, run-sonar]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
