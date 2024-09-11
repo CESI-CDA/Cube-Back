@@ -21,11 +21,6 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
-  # Job 2: Setup environment and database
-  setup-environment:
-    runs-on: ubuntu-latest
-    needs: setup  # Ce job dépend de l'installation précédente
-    steps:
       - name: Setup environment variables
         run: |
           echo "APP_NAME=${{ secrets.APP_NAME }}" >> .env
@@ -46,16 +41,49 @@ jobs:
       - name: Create SQLite database file
         run: touch /tmp/database.sqlite
 
-  # Job 3: Run migrations, seed database, and run tests
-  run-tests:
+      - name: Save dependencies and environment file
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-data
+          path: |
+            vendor/
+            .env
+            /tmp/database.sqlite
+
+  # Job 2: Setup environment and database (download artifacts)
+  setup-environment:
     runs-on: ubuntu-latest
-    needs: setup-environment  # Ce job dépend de la configuration de l'environnement
+    needs: setup  # Ce job dépend du job précédent
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Download environment and dependencies
+        uses: actions/download-artifact@v2
+        with:
+          name: app-data
+
       - name: Run migrations before tests
         run: php artisan migrate
+        working-directory: ./ # Assure-toi d'être dans le bon répertoire
 
       - name: Seed the database
         run: php artisan db:seed
+        working-directory: ./ # Ajoute le répertoire du projet Laravel
+
+  # Job 3: Run PHPUnit tests (download artifacts)
+  run-tests:
+    runs-on: ubuntu-latest
+    needs: setup-environment  # Ce job dépend du job précédent
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Download environment and dependencies
+        uses: actions/download-artifact@v2
+        with:
+          name: app-data
 
       - name: Run PHPUnit tests
         run: php artisan test
+        working-directory: ./ # Ajoute le répertoire du projet Laravel
