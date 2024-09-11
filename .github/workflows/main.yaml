@@ -26,20 +26,20 @@ jobs:
 
       - name: Setup environment variables
         run: |
-          echo "APP_NAME=${{ vars.APP_NAME }}" >> .env
-          echo "APP_ENV=${{ vars.APP_ENV }}" >> .env
+          echo "APP_NAME=${{ secrets.APP_NAME }}" >> .env
+          echo "APP_ENV=${{ secrets.APP_ENV }}" >> .env
           echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
-          echo "APP_DEBUG=${{ vars.APP_DEBUG }}" >> .env
-          echo "APP_URL=${{ vars.APP_URL }}" >> .env
-          echo "DB_CONNECTION=${{ vars.DB_CONNECTION }}" >> .env
-          echo "DB_DATABASE=${{ vars.DB_DATABASE }}" >> .env
-          echo "DB_FOREIGN_KEYS=${{ vars.DB_FOREIGN_KEYS }}" >> .env
-          echo "CACHE_DRIVER=${{ vars.CACHE_DRIVER }}" >> .env
-          echo "SESSION_DRIVER=${{ vars.SESSION_DRIVER }}" >> .env
-          echo "QUEUE_CONNECTION=${{ vars.QUEUE_CONNECTION }}" >> .env
-          echo "MAIL_MAILER=${{ vars.MAIL_MAILER }}" >> .env
-          echo "BROADCAST_DRIVER=${{ vars.BROADCAST_DRIVER }}" >> .env
-          echo "FILESYSTEM_DRIVER=${{ vars.FILESYSTEM_DRIVER }}" >> .env
+          echo "APP_DEBUG=${{ secrets.APP_DEBUG }}" >> .env
+          echo "APP_URL=${{ secrets.APP_URL }}" >> .env
+          echo "DB_CONNECTION=${{ secrets.DB_CONNECTION }}" >> .env
+          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+          echo "DB_FOREIGN_KEYS=${{ secrets.DB_FOREIGN_KEYS }}" >> .env
+          echo "CACHE_DRIVER=${{ secrets.CACHE_DRIVER }}" >> .env
+          echo "SESSION_DRIVER=${{ secrets.SESSION_DRIVER }}" >> .env
+          echo "QUEUE_CONNECTION=${{ secrets.QUEUE_CONNECTION }}" >> .env
+          echo "MAIL_MAILER=${{ secrets.MAIL_MAILER }}" >> .env
+          echo "BROADCAST_DRIVER=${{ secrets.BROADCAST_DRIVER }}" >> .env
+          echo "FILESYSTEM_DRIVER=${{ secrets.FILESYSTEM_DRIVER }}" >> .env
 
       - name: Display final .env content
         run: cat .env
