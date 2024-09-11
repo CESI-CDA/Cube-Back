@@ -40,4 +40,4 @@ jobs:
         run: php artisan db:seed --env=testing
 
       - name: Run PHPUnit tests
-        run: ./vendor/bin/phpunit --env=testing
+        run: php artisan test --env=testing
