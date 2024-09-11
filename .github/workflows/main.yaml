@@ -29,15 +29,15 @@ jobs:
 
       - name: Run migrations before tests
         run: |
-          php artisan migrate --env=testing
-          php artisan migrate:status --env=testing
+          php artisan migrate
+          php artisan migrate:status
 
       - name: List SQLite tables
         run: |
           sqlite3 /tmp/database.sqlite ".tables"
 
       - name: Seed the database
-        run: php artisan db:seed --env=testing
+        run: php artisan db:seed
 
       - name: Run PHPUnit tests
-        run: php artisan test --env=testing
+        run: php artisan test
