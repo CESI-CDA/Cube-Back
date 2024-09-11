@@ -6,10 +6,9 @@ on:
       - TestAndProtectedRoutes
 
 jobs:
-  laravel-tests:
+  # Job 1: Setup repository and install dependencies
+  setup:
     runs-on: ubuntu-latest
-    environment: Test back-end
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -22,9 +21,11 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
-      # - name: Display initial .env content
-      #   run: cat .env || echo ".env file does not exist yet"
-
+  # Job 2: Setup environment and database
+  setup-environment:
+    runs-on: ubuntu-latest
+    needs: setup  # Ce job dépend de l'installation précédente
+    steps:
       - name: Setup environment variables
         run: |
           echo "APP_NAME=${{ secrets.APP_NAME }}" >> .env
@@ -42,19 +43,16 @@ jobs:
           echo "BROADCAST_DRIVER=${{ secrets.BROADCAST_DRIVER }}" >> .env
           echo "FILESYSTEM_DRIVER=${{ secrets.FILESYSTEM_DRIVER }}" >> .env
 
-      # - name: Display final .env content
-      #   run: cat .env
-
       - name: Create SQLite database file
         run: touch /tmp/database.sqlite
 
+  # Job 3: Run migrations, seed database, and run tests
+  run-tests:
+    runs-on: ubuntu-latest
+    needs: setup-environment  # Ce job dépend de la configuration de l'environnement
+    steps:
       - name: Run migrations before tests
-        run: |
-          php artisan migrate
-
-      # - name: List SQLite tables
-      #   run: |
-      #     sqlite3 /tmp/database.sqlite ".tables"
+        run: php artisan migrate
 
       - name: Seed the database
         run: php artisan db:seed
