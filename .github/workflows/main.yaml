@@ -22,8 +22,8 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
-      - name: Display initial .env content
-        run: cat .env || echo ".env file does not exist yet"
+      # - name: Display initial .env content
+      #   run: cat .env || echo ".env file does not exist yet"
 
       - name: Setup environment variables
         run: |
@@ -42,8 +42,8 @@ jobs:
           echo "BROADCAST_DRIVER=${{ secrets.BROADCAST_DRIVER }}" >> .env
           echo "FILESYSTEM_DRIVER=${{ secrets.FILESYSTEM_DRIVER }}" >> .env
 
-      - name: Display final .env content
-        run: cat .env
+      # - name: Display final .env content
+      #   run: cat .env
 
       - name: Create SQLite database file
         run: touch /tmp/database.sqlite
@@ -51,11 +51,10 @@ jobs:
       - name: Run migrations before tests
         run: |
           php artisan migrate
-          php artisan migrate:status
 
-      - name: List SQLite tables
-        run: |
-          sqlite3 /tmp/database.sqlite ".tables"
+      # - name: List SQLite tables
+      #   run: |
+      #     sqlite3 /tmp/database.sqlite ".tables"
 
       - name: Seed the database
         run: php artisan db:seed
