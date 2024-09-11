@@ -78,19 +78,6 @@ jobs:
           source: "."
           target: "/var/www/html/Cube-Back"
 
-      - name: Merge Develop into Main on Remote Server
-        uses: appleboy/ssh-action@v0.1.5
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          script: |
-            cd /var/www/html/Cube-Back
-            git checkout main
-            git pull origin main
-            git merge develop
-            git push origin main
-
       - name: Restart Apache server
         uses: appleboy/ssh-action@v0.1.5
         with:
