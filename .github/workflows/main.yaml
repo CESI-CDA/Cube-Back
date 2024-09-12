@@ -96,6 +96,7 @@ jobs:
           script: |
             cd /var/www/html/Cube-Back
             git pull origin main
+            php artisan migrate
 
       - name: Restart Apache server
         uses: appleboy/ssh-action@v0.1.5
