@@ -3,7 +3,7 @@ name: Laravel API CI
 on:
   push:
     branches:
-      - '**' # Permet de prendre en compte les push sur toutes les branches pour les tests
+      - '**' # Permet de prendre en compte les push sur toutes les branches pour les tests 
   pull_request:
     branches:
       - '**' # Permet de prendre en compte toutes les branches lors d'un pull request
