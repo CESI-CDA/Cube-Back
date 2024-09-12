@@ -103,4 +103,4 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: systemctl restart apache2
+          script: sudo systemctl restart apache2
