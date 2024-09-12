@@ -3,10 +3,10 @@ name: Laravel API CI
 on:
   push:
     branches:
-      - main
+      - '**' # Permet de prendre en compte les push sur toutes les branches pour les tests
   pull_request:
     branches:
-      - main
+      - '**' # Permet de prendre en compte toutes les branches lors d'un pull request
 
 jobs:
   laravel-tests:
@@ -74,6 +74,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: Raspberry
     needs: [laravel-tests, run-sonar]
+    if: github.ref == 'refs/heads/main' # Exécuter uniquement si le push est sur la branche main
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
